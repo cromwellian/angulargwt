@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to='angulargwt'>
+
+    <inherits name="elemental.Elemental"/>
+
+    <!-- Specify the app entry point class.                         -->
+    <entry-point class='com.google.gwt.angular.client.todomvc.TodoApp'/>
+    <generate-with class="com.google.gwt.angular.rebind.AngularGenerator">
+        <when-type-assignable class="com.google.gwt.angular.client.Model"/>
+    </generate-with>
+    <generate-with class="com.google.gwt.angular.rebind.AngularGenerator">
+        <when-type-assignable class="com.google.gwt.angular.client.Scope"/>
+    </generate-with>
+    <generate-with class="com.google.gwt.angular.rebind.AngularGenerator">
+        <when-type-assignable class="com.google.gwt.angular.client.AngularController"/>
+    </generate-with>
+    <!-- Specify the paths for translatable code                    -->
+    <source path='client'/>
+    <source path='shared'/>
+    <set-configuration-property name="user.agent.runtimeWarning" value="false"/>
+</module>
