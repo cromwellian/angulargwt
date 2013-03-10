@@ -2,6 +2,7 @@ package com.google.gwt.angular.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import elemental.client.Browser;
+import elemental.dom.TimeoutHandler;
 import elemental.events.Event;
 import elemental.events.EventListener;
 import elemental.html.ScriptElement;
@@ -18,12 +19,21 @@ public abstract class AngularApp implements EntryPoint {
     ScriptElement se = Browser.getDocument().createScriptElement();
     se.setSrc("angular.js");
     se.setType("text/javascript");
-    Browser.getDocument().getHead().appendChild(se);
+    Browser.getDocument().getBody().appendChild(se);
     se.setOnload(new EventListener() {
       public void handleEvent(Event evt) {
+        unbind();
         main();
-        bootstrap();
+        Browser.getWindow().setTimeout(new TimeoutHandler() {
+          public void onTimeoutHandler() {
+            bootstrap();
+          }
+        }, 500);
       }
+
+      private native void unbind() /*-{
+          $wnd.angular.element(document).unbind('DOMContentLoaded');
+      }-*/;
     });
   }
 
@@ -33,6 +43,6 @@ public abstract class AngularApp implements EntryPoint {
   protected abstract void main();
 
   private native void bootstrap() /*-{
-      $wnd.angular.bootstrap($doc);
+      $wnd.angular.bootstrap($doc, ['todomvc']);
   }-*/;
 }

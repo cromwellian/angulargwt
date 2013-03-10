@@ -7,7 +7,7 @@ import elemental.util.ArrayOf;
 
 import static com.google.gwt.angular.client.Util.make;
 
-@NgName("TodoCtrl")
+@NgInject(name = "TodoCtrl")
 public class TodoController extends AngularController<TodoScope> {
 
   private ArrayOf<Todo> todos;
@@ -20,8 +20,8 @@ public class TodoController extends AngularController<TodoScope> {
     this.store = store;
     this.filterFilter = filter;
     scope.newTodo("")
-      .editedTodo(null)
-      .location(location);
+        .editedTodo(null)
+        .location(location);
     this.todos = store.get();
     scope.todos(todos);
     if ("".equals(location.path())) {
@@ -34,8 +34,8 @@ public class TodoController extends AngularController<TodoScope> {
     Todo todoPredicate = makeTodo();
     todoPredicate.setCompleted(false);
     scope.remainingCount(filterFilter.filter(todos, todoPredicate).length())
-          .doneCount(todos.length() - scope.remainingCount())
-          .allChecked(scope.remainingCount() != 0);
+        .doneCount(todos.length() - scope.remainingCount())
+        .allChecked(scope.remainingCount() != 0);
     store.put(todos);
   }
 
@@ -57,7 +57,7 @@ public class TodoController extends AngularController<TodoScope> {
     }
     Todo newTodo = makeTodo();
     newTodo.setTitle(scope.newTodo())
-           .setCompleted(false);
+        .setCompleted(false);
     todos.push(newTodo);
     scope.newTodo("");
   }

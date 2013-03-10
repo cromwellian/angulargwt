@@ -1,5 +1,6 @@
 package com.google.gwt.angular.client;
 
+import com.google.gwt.core.client.JavaScriptObject;
 import elemental.util.ArrayOf;
 
 import java.util.Iterator;
@@ -36,14 +37,13 @@ public class AngularController<T extends Scope> {
   protected T scope;
 
   protected AngularController() {
-    register();
   }
 
   protected void setScope(T scope) {
     this.scope = scope;
   }
 
-  protected void register() {
+  protected void register(JavaScriptObject module) {
   }
 
   protected <S> Iterable<S> iterable(final ArrayOf<S> array) {

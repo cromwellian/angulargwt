@@ -1770,9 +1770,9 @@
                 fn();
             }
 
-            this.bind('DOMContentLoaded', trigger); // works for modern browsers and IE9
+//            this.bind('DOMContentLoaded', trigger); // works for modern browsers and IE9
             // we can not use jqLite since we are not done loading and jQuery could be loaded later.
-            JQLite(window).bind('load', trigger); // fallback to window.onload for others
+//            JQLite(window).bind('load', trigger); // fallback to window.onload for others
         },
         toString: function () {
             var value = [];
@@ -14902,7 +14902,7 @@
     publishExternalAPI(angular);
 
     jqLite(document).ready(function () {
-        angularInit(document, bootstrap);
+//        angularInit(document, bootstrap);
     });
 
 })(window, document);

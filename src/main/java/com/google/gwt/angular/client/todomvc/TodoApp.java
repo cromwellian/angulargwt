@@ -14,13 +14,6 @@ import static com.google.gwt.angular.client.Util.make;
 public class TodoApp extends AngularApp {
   @Override
   protected void main() {
-    // setup module
-    TodoScope scope = make(GWT.create(TodoScope.class));
-    scope.newTodo("foo");
-    Todo t = Util.make(GWT.create(Todo.class));
-    t.setTitle("hello");
-
-    Browser.getWindow().alert(scope.newTodo() + t.getTitle());
     GWT.create(TodoAppModule.class);
   }
 }
