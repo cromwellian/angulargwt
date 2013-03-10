@@ -8,4 +8,6 @@ package com.google.gwt.angular.client;
 @NgInject(name = "$scope",
     basetype = Scope.class)
 public interface Scope<T extends Scope<T>> extends Model<T> {
+  <S> void $watch(String expr, WatchFunction<S> func);
+  void $apply(String expr);
 }

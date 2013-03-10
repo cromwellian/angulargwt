@@ -1,8 +1,6 @@
 package com.google.gwt.angular.client.todomvc;
 
 import com.google.gwt.angular.client.NgInject;
-import com.google.gwt.angular.client.Util;
-import com.google.gwt.core.client.JavaScriptObject;
 import elemental.client.Browser;
 import elemental.js.util.JsArrayOf;
 import elemental.js.util.Json;

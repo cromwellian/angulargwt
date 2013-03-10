@@ -3,6 +3,7 @@
  * (c) 2010-2012 Google, Inc. http://angularjs.org
  * License: MIT
  */
+// AngularGWT: This version hacked to support loading in an IFRAME
 (function (window, document, undefined) {
     'use strict';
 
@@ -1770,9 +1771,9 @@
                 fn();
             }
 
-            this.bind('DOMContentLoaded', trigger); // works for modern browsers and IE9
+//            this.bind('DOMContentLoaded', trigger); // works for modern browsers and IE9
             // we can not use jqLite since we are not done loading and jQuery could be loaded later.
-            JQLite(window).bind('load', trigger); // fallback to window.onload for others
+//            JQLite(window).bind('load', trigger); // fallback to window.onload for others
         },
         toString: function () {
             var value = [];
@@ -14902,8 +14903,8 @@
     publishExternalAPI(angular);
 
     jqLite(document).ready(function () {
-        angularInit(document, bootstrap);
+//        angularInit(document, bootstrap);
     });
 
-})(window, document);
-angular.element(document).find('head').append('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak{display:none;}ng\\:form{display:block;}</style>');
+})($wnd, $doc);
+angular.element($doc).find('head').append('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak{display:none;}ng\\:form{display:block;}</style>');

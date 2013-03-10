@@ -189,7 +189,7 @@ public class AngularGenerator extends Generator {
         NgInject ngInject = clazz.getAnnotation(NgInject.class);
         if (ngInject != null) {
           if (AngularController.class.isAssignableFrom(clazz)) {
-            sw.println("args["+i+"].@" + AngularController.class.getName()+"::register" +
+            sw.println("args[" + i + "].@" + AngularController.class.getName() + "::register" +
                 "(Lcom/google/gwt/core/client/JavaScriptObject;)(module);");
           } else {
             sw.println("module.factory('" + ngInject.name() + "', function() {");
@@ -197,6 +197,55 @@ public class AngularGenerator extends Generator {
             sw.println(" return args[" + i + "];");
             sw.outdent();
             sw.println("});");
+          }
+        } else if (Directive.class.isAssignableFrom(clazz)) {
+          JClassType dType = context.getTypeOracle().findType(clazz.getName());
+
+          for (JMethod method : dType.getMethods()) {
+            NgDirective ngDirective = method.getAnnotation(NgDirective.class);
+            if (ngDirective != null) {
+              sw.print("module.directive('" + ngDirective.value() + "', " +
+                  "function " + method.getName() + "(");
+              JMethod initMethod = null;
+              for (JMethod m : dType.getMethods()) {
+                if (m == method) {
+                  continue;
+                }
+                if (m.getName().equals("on" + Character.toUpperCase(method.getName()
+                    .charAt(0)) + method.getName().substring(1))) {
+                  initMethod = m;
+                  break;
+                }
+              }
+              ArrayList<String> params = new ArrayList<String>();
+              if (initMethod != null) {
+                for (JParameter param : initMethod.getParameters()) {
+                  JClassType pType = param.getType().isClassOrInterface();
+                  if (pType != null) {
+                    NgInject pInject = pType.getAnnotation(NgInject
+                        .class);
+
+                    if (pInject != null) {
+                      params.add(pInject.name());
+                    }
+                  }
+                }
+              }
+              String paramString = Joiner.on(",").join(params);
+              sw.println(paramString + ") {");
+              sw.indent();
+              sw.println("return function(scope, elem, attrs) {");
+              sw.indent();
+              sw.println("var directive = @" + dType.getQualifiedSourceName() + "::new()();");
+              if (initMethod != null) {
+                sw.println("directive." + initMethod.getJsniSignature() + "(" + paramString + ");");
+              }
+              sw.println("directive." + method.getJsniSignature() + "(scope, elem, attrs);");
+              sw.println("};");
+              sw.outdent();
+              sw.outdent();
+              sw.println("});");
+            }
           }
         }
         i++;
@@ -370,7 +419,6 @@ public class AngularGenerator extends Generator {
     }
     return methods;
   }
-
 
   private Collection<JMethod> watchMethods(JClassType type) {
     Collection<JMethod> methods = new ArrayList<JMethod>();

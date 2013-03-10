@@ -3,6 +3,7 @@
  * (c) 2010-2012 Google, Inc. http://angularjs.org
  * License: MIT
  */
+// AngularGWT: This version hacked to support loading in an IFRAME
 (function (window, document, undefined) {
     'use strict';
 
@@ -14905,5 +14906,5 @@
 //        angularInit(document, bootstrap);
     });
 
-})(window, document);
-angular.element(document).find('head').append('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak{display:none;}ng\\:form{display:block;}</style>');
+})($wnd, $doc);
+angular.element($doc).find('head').append('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak{display:none;}ng\\:form{display:block;}</style>');

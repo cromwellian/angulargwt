@@ -29,7 +29,7 @@ public class TodoController extends AngularController<TodoScope> {
     }
   }
 
-  @NgWatch("todos")
+  @NgWatch(value = "todos", objEq = true)
   public void $watchTodos() {
     Todo todoPredicate = makeTodo();
     todoPredicate.setCompleted(false);

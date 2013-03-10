@@ -6,6 +6,8 @@ import elemental.dom.TimeoutHandler;
 import elemental.events.Event;
 import elemental.events.EventListener;
 import elemental.html.ScriptElement;
+import elemental.html.Window;
+import elemental.js.html.JsWindow;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -19,12 +21,12 @@ public abstract class AngularApp implements EntryPoint {
     ScriptElement se = Browser.getDocument().createScriptElement();
     se.setSrc("angular.js");
     se.setType("text/javascript");
-    Browser.getDocument().getBody().appendChild(se);
+    getModuleWindow().getDocument().getBody().appendChild(se);
     se.setOnload(new EventListener() {
       public void handleEvent(Event evt) {
         unbind();
         main();
-        Browser.getWindow().setTimeout(new TimeoutHandler() {
+        getModuleWindow().setTimeout(new TimeoutHandler() {
           public void onTimeoutHandler() {
             bootstrap();
           }
@@ -36,6 +38,10 @@ public abstract class AngularApp implements EntryPoint {
       }-*/;
     });
   }
+
+  private native JsWindow getModuleWindow() /*-{
+    return window;
+  }-*/;
 
   /**
    * Override this and invoke GWT.create() on your modules.
