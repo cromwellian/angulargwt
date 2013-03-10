@@ -5,7 +5,7 @@ import com.google.gwt.angular.client.Scope;
 /**
  * Base class of generated scopes.
  */
-public class JsScopeBase<T extends JsScopeBase<T>> extends JsModelBase<T> implements Scope<T> {
+public class JsScopeBase<T extends Scope<T>> extends JsModelBase<T> implements Scope<T> {
   protected JsScopeBase() {
   }
 }

@@ -19,11 +19,11 @@ public class TodoController extends AngularController<TodoScope> {
     this.location = location;
     this.store = store;
     this.filterFilter = filter;
-    scope.setNewTodo("");
-    scope.setEditedTodo(null);
+    scope.newTodo("")
+      .editedTodo(null)
+      .location(location);
     this.todos = store.get();
-    scope.setTodos(todos);
-    scope.setLocation(location);
+    scope.todos(todos);
     if ("".equals(location.path())) {
       location.path("/");
     }
@@ -33,15 +33,15 @@ public class TodoController extends AngularController<TodoScope> {
   public void $watchTodos() {
     Todo todoPredicate = makeTodo();
     todoPredicate.setCompleted(false);
-    scope.setRemainingCount(filterFilter.filter(todos, todoPredicate).length());
-    scope.setDoneCount(todos.length() - scope.getRemainingCount());
-    scope.setAllChecked(scope.getRemainingCount() != 0);
+    scope.remainingCount(filterFilter.filter(todos, todoPredicate).length())
+          .doneCount(todos.length() - scope.remainingCount())
+          .allChecked(scope.remainingCount() != 0);
     store.put(todos);
   }
 
   @NgWatch("location.path()")
   public void $watchPath(String path) {
-    scope.setStatusFilter("/active".equals(path) ?
+    scope.statusFilter("/active".equals(path) ?
         makeTodo().setCompleted(false) :
         "/completed".equals(path) ?
             makeTodo().setCompleted(true) : null);
@@ -52,25 +52,25 @@ public class TodoController extends AngularController<TodoScope> {
   }
 
   public void addTodo() {
-    if (scope.getNewTodo().length() == 0) {
+    if (scope.newTodo().length() == 0) {
       return;
     }
     Todo newTodo = makeTodo();
-    newTodo.setTitle(scope.getNewTodo());
-    newTodo.setCompleted(false);
+    newTodo.setTitle(scope.newTodo())
+           .setCompleted(false);
     todos.push(newTodo);
-    scope.setNewTodo("");
+    scope.newTodo("");
   }
 
   public void doneEditing(Todo todo) {
-    scope.setEditedTodo(null);
+    scope.editedTodo(null);
     if ("".equals(todo.getTitle())) {
       removeTodo(todo);
     }
   }
 
   public void editTodo(Todo todo) {
-    scope.setEditedTodo(todo);
+    scope.editedTodo(todo);
   }
 
   public void removeTodo(Todo todo) {
@@ -90,6 +90,6 @@ public class TodoController extends AngularController<TodoScope> {
         result.push(todo);
       }
     }
-    scope.setTodos(result);
+    scope.todos(result);
   }
 }

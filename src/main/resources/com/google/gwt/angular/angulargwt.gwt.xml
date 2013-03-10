@@ -14,8 +14,12 @@
     <generate-with class="com.google.gwt.angular.rebind.AngularGenerator">
         <when-type-assignable class="com.google.gwt.angular.client.AngularController"/>
     </generate-with>
+    <generate-with class="com.google.gwt.angular.rebind.AngularGenerator">
+        <when-type-assignable class="com.google.gwt.angular.client.AngularModule"/>
+    </generate-with>
     <!-- Specify the paths for translatable code                    -->
     <source path='client'/>
     <source path='shared'/>
     <set-configuration-property name="user.agent.runtimeWarning" value="false"/>
+    <set-property name="compiler.stackMode" value="strip"/>
 </module>

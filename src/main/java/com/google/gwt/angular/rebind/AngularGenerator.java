@@ -2,7 +2,9 @@ package com.google.gwt.angular.rebind;
 
 import com.google.common.base.Joiner;
 import com.google.gwt.angular.client.*;
+import com.google.gwt.angular.client.impl.JsModelBase;
 import com.google.gwt.angular.client.impl.JsScopeBase;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.ext.Generator;
 import com.google.gwt.core.ext.GeneratorContext;
 import com.google.gwt.core.ext.TreeLogger;
@@ -10,7 +12,9 @@ import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.*;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
+import elemental.js.json.JsJsonObject;
 import elemental.json.JsonObject;
+import elemental.util.ArrayOf;
 import elemental.util.ArrayOfString;
 
 import java.io.PrintWriter;
@@ -19,9 +23,11 @@ import java.util.Collection;
 import java.util.List;
 
 public class AngularGenerator extends Generator {
-  public static final String IMPL = "Impl2";
-  private static final String ADAPTER = "Adapter2";
+  public static final String IMPL = "Impl";
+  private static final String SCOPEIMPL = "Jso";
   private static final String FACTORY = "Factory";
+  private static final String MODELIMPL = "Jso";
+  private static final String MODULEIMPL = "Impl";
   private JClassType scopeType;
   private JClassType elementType;
   private JClassType gwtElementType;
@@ -30,8 +36,9 @@ public class AngularGenerator extends Generator {
   private JClassType modelType;
   private JClassType moduleType;
   private JClassType factoryType;
+  private JClassType arrayOfType;
 
-  @Override
+    @Override
   public String generate(TreeLogger logger, GeneratorContext context, String typeName)
       throws UnableToCompleteException {
     TypeOracle typeOracle = context.getTypeOracle();
@@ -43,14 +50,15 @@ public class AngularGenerator extends Generator {
     modelType = typeOracle.findType(Model.class.getName());
     moduleType = typeOracle.findType(AngularModule.class.getName());
     factoryType = typeOracle.findType(Factory.class.getName());
-    logger.log(TreeLogger.Type.ERROR, "Generating " + typeName);
+    arrayOfType = typeOracle.findType(ArrayOf.class.getName());
+    logger.log(TreeLogger.Type.DEBUG, "Generating " + typeName);
     JClassType type = typeOracle.findType(typeName);
     if (type.isAssignableTo(controllerType)) {
       return generateController(logger, context, typeName, type);
     } else if (type.isAssignableTo(scopeType)) {
       return generateScopeFactory(logger, context, type);
     } else if (type.isAssignableTo(modelType)) {
-      return generateModelType(logger, context, type);
+      return generateModelFactory(logger, context, type);
     } else if (type.isAssignableTo(moduleType)) {
       return generateModule(logger, context, type);
     }
@@ -64,6 +72,8 @@ public class AngularGenerator extends Generator {
         new ClassSourceFileComposerFactory(type.getPackage().getName(),
             type.getName() + FACTORY);
     fac.addImplementedInterface(factoryType.getQualifiedSourceName());
+    fac.addImport(JsJsonObject.class.getName());
+    fac.addImport(Util.class.getName());
     PrintWriter pw = context.tryCreate(logger, type.getPackage().getName(),
         type.getName() + FACTORY);
     SourceWriter sw = null;
@@ -76,23 +86,114 @@ public class AngularGenerator extends Generator {
     }
 
     sw.indent();
-    sw.println("public " + type.getQualifiedSourceName() + " create() {");
+    sw.println("public native " +  generateScope(logger, context, type) + " create() /*-{");
     sw.indent();
-    sw.println("return " + generateScope(logger, context, type) + ".createObject().cast();");
+
+
+    sw.println("return {};");
     sw.outdent();
-    sw.println("}");
+    sw.println("}-*/;");
     sw.outdent();
     sw.commit(logger);
-    logger.log(TreeLogger.Type.ERROR, "Generated " + typeName);
+    logger.log(TreeLogger.Type.DEBUG, "Generated " + typeName);
     return typeName;
   }
 
+    private String generateModelFactory(TreeLogger logger, GeneratorContext context,
+                                        JClassType type) throws UnableToCompleteException {
+        ClassSourceFileComposerFactory fac =
+                new ClassSourceFileComposerFactory(type.getPackage().getName(),
+                        type.getName() + FACTORY);
+        fac.addImplementedInterface(factoryType.getQualifiedSourceName());
+        fac.addImport(JsJsonObject.class.getName());
+        fac.addImport(Util.class.getName());
+        PrintWriter pw = context.tryCreate(logger, type.getPackage().getName(),
+                type.getName() + FACTORY);
+        SourceWriter sw = null;
+        String typeName = type.getQualifiedSourceName() + FACTORY;
+        if (pw != null) {
+            sw = fac.createSourceWriter(context, pw);
+        }
+        if (sw == null) {
+            return typeName;
+        }
+
+        sw.indent();
+        sw.println("public native " +  generateModelType(logger, context, type) + " create() /*-{");
+        sw.indent();
+
+
+        sw.println("return {};");
+        sw.outdent();
+        sw.println("}-*/;");
+        sw.outdent();
+        sw.commit(logger);
+        logger.log(TreeLogger.Type.DEBUG, "Generated " + typeName);
+        return typeName;
+    }
+
   private String generateModule(TreeLogger logger, GeneratorContext context, JClassType type) {
-    return null;  //To change body of created methods use File | Settings | File Templates.
+    NgDepends deps = type.getAnnotation(NgDepends.class);
+     String simpleName = type.getName() + MODULEIMPL;
+      ClassSourceFileComposerFactory fac =
+              new ClassSourceFileComposerFactory(type.getPackage().getName(),
+                      simpleName);
+      fac.addImport(GWT.class.getName());
+      fac.addImport(Util.class.getName());
+      fac.addImplementedInterface(AngularModule.class.getName());
+      PrintWriter pw = context.tryCreate(logger, type.getPackage().getName(),
+              simpleName);
+      SourceWriter sw = null;
+      String typeName = type.getQualifiedSourceName() + MODULEIMPL;
+
+      if (pw != null) {
+          sw = fac.createSourceWriter(context, pw);
+      }
+      if (sw == null) {
+          return typeName;
+      }
+    sw.indent();
+    sw.println("public " + simpleName + "() {");
+      sw.indent();
+
+      if (deps != null) {
+      for (Class<?> clazz : deps.value()) {
+          sw.println("GWT.create(" + clazz.getName() +".class);");
+      }
+      sw.outdent();
+    }
+    sw.println("}");
+    sw.outdent();
+    sw.commit(logger);
+    return typeName;
   }
 
-  private String generateModelType(TreeLogger logger, GeneratorContext context, JClassType type) {
-    return null;  //To change body of created methods use File | Settings | File Templates.
+  private String generateModelType(TreeLogger logger, GeneratorContext context, JClassType modelType) throws UnableToCompleteException {
+      String simpleName = modelType.getName() + MODELIMPL;
+      ClassSourceFileComposerFactory fac =
+              new ClassSourceFileComposerFactory(modelType.getPackage().getName(),
+                      simpleName);
+      fac.setSuperclass(JsModelBase.class.getName() + "<" + modelType.getName() + ">");
+      fac.addImport(JsonObject.class.getName());
+      fac.addImport(ArrayOfString.class.getName());
+      fac.addImport(JsModelBase.class.getName());
+      fac.addImport(Util.class.getName());
+      fac.addImplementedInterface(modelType.getQualifiedSourceName());
+      PrintWriter pw = context.tryCreate(logger, modelType.getPackage().getName(),
+              simpleName);
+      SourceWriter sw = null;
+      String typeName = modelType.getQualifiedSourceName() + MODELIMPL;
+
+      if (pw != null) {
+          sw = fac.createSourceWriter(context, pw);
+      }
+      if (sw == null) {
+          return typeName;
+      }
+      generateBeanImpl(logger, context, modelType, simpleName, sw);
+
+      sw.commit(logger);
+      return typeName;
   }
 
   private String generateController(TreeLogger logger, GeneratorContext context, String typeName,
@@ -151,7 +252,7 @@ public class AngularGenerator extends Generator {
     sw.print(controllerParams);
     sw.println(");");
 
-    for (JMethod action : publicNonBeanMethods(type, onInitMethod)) {
+    for (JMethod action : publicActionMethods(type, onInitMethod)) {
       String argString = declareArgs(action);
       sw.println("$scope." + action.getName() + " = $entry(function("
           + argString + ") {");
@@ -162,6 +263,20 @@ public class AngularGenerator extends Generator {
       sw.outdent();
       sw.println("});");
     }
+
+      for (JMethod action : watchMethods(type)) {
+          NgWatch watchParams = action.getAnnotation(NgWatch.class);
+          String argString = declareArgs(action);
+          sw.println("$scope.$watch('" + watchParams.value() + "', $entry(function("
+                  + argString + ") {");
+          sw.indent();
+          sw.print(isVoidMethod(action) ? "" : "return ");
+          sw.print("self." + action.getJsniSignature());
+          sw.println("(" + argString + ");");
+          sw.outdent();
+          sw.println("}), " + watchParams.objEq()+");");
+      }
+
     sw.outdent();
     sw.println("});");
     // assign controller injections
@@ -189,11 +304,14 @@ public class AngularGenerator extends Generator {
     return method.getReturnType() == JPrimitiveType.VOID;
   }
 
-  private Collection<JMethod> publicNonBeanMethods(JClassType type, JMethod onInitMethod) {
+  private Collection<JMethod> publicActionMethods(JClassType type, JMethod onInitMethod) {
     Collection<JMethod> methods = new ArrayList<JMethod>();
     for (JMethod method : type.getMethods()) {
       if (method == onInitMethod) {
         continue;
+      }
+      if (method.getAnnotation(NgWatch.class) != null) {
+          continue;
       }
       if (method.isPublic() && !method.isAbstract() && !method.isStatic() &&
           !isGetter(method) && !isSetter(method)) {
@@ -203,20 +321,44 @@ public class AngularGenerator extends Generator {
     return methods;
   }
 
+
+    private Collection<JMethod> watchMethods(JClassType type) {
+        Collection<JMethod> methods = new ArrayList<JMethod>();
+        for (JMethod method : type.getMethods()) {
+
+            if (method.getAnnotation(NgWatch.class) == null) {
+                continue;
+            }
+
+             methods.add(method);
+
+        }
+        return methods;
+    }
+
   private boolean isSetter(JMethod method) {
     String name = method.getName();
+    // traditional setFooField(type) JavaBean setter
     if (name.startsWith("set") && Character.isUpperCase(name.charAt(3))) {
       return method.getParameters().length == 1 &&
           (method.getReturnType() == JPrimitiveType.VOID || method.getReturnType() == method
               .getEnclosingType());
+    // non-traditional fluent-only EnclosingType fooField(type) setter
+    } else if (method.getReturnType() == method.getEnclosingType() && method.getParameters().length == 1) {
+        return true;
     }
     return false;
   }
 
   private boolean isGetter(JMethod method) {
     String name = method.getName();
+    // traditional Type getFooField() JavaBean getter
     if (name.startsWith("get") && Character.isUpperCase(name.charAt(3))) {
       return method.getParameters().length == 0;
+    // non traditional Type foo() getter, needs to have paired setter to be detected correctly
+    } else if (method.getParameters().length == 0) {
+        // TODO: should enforce that a setter exists  to disambiguate this style of getter
+        return true;
     }
     return false;
   }
@@ -234,7 +376,7 @@ public class AngularGenerator extends Generator {
   private String generateScope(TreeLogger logger, GeneratorContext context,
                                JClassType scopeClass)
       throws UnableToCompleteException {
-    String simpleName = scopeClass.getName() + ADAPTER;
+    String simpleName = scopeClass.getName() + SCOPEIMPL;
     ClassSourceFileComposerFactory fac =
         new ClassSourceFileComposerFactory(scopeClass.getPackage().getName(),
             simpleName);
@@ -247,7 +389,7 @@ public class AngularGenerator extends Generator {
     PrintWriter pw = context.tryCreate(logger, scopeClass.getPackage().getName(),
         simpleName);
     SourceWriter sw = null;
-    String typeName = scopeClass.getQualifiedSourceName() + ADAPTER;
+    String typeName = scopeClass.getQualifiedSourceName() + SCOPEIMPL;
 
     if (pw != null) {
       sw = fac.createSourceWriter(context, pw);
@@ -255,119 +397,153 @@ public class AngularGenerator extends Generator {
     if (sw == null) {
       return typeName;
     }
+    generateBeanImpl(logger, context, scopeClass, simpleName, sw);
 
-    // constructor
-    sw.println("protected " + simpleName + "() {}");
-
-    // getters and setters
-    for (JMethod method : scopeClass.getMethods()) {
-      if (isGetter(method)) {
-        JPrimitiveType pType = method.getReturnType().isPrimitive();
-        if (pType != null) {
-          if (pType != JPrimitiveType.BOOLEAN) {
-            sw.println("final public " + pType.getSimpleSourceName() + " " + method.getName() + "" +
-                "() {");
-            sw.indent();
-            sw.println("return (" + pType.getSimpleSourceName() + ") json().getNumber(" +
-                quotedFieldName(method) + ");");
-            sw.outdent();
-            sw.println("}");
-          } else if (pType == JPrimitiveType.BOOLEAN) {
-            sw.println("final public boolean " + method.getName() + "() {");
-            sw.indent();
-            sw.println("return json().getBoolean(" + quotedFieldName(method) + ");");
-            sw.outdent();
-            sw.println("}");
-          } else {
-            // shouldn't reach here (only void left)
-            throw new UnableToCompleteException();
-          }
-        } else {
-          JClassType cType = method.getReturnType().isClassOrInterface();
-          if (cType.isAssignableTo(stringType)) {
-            sw.println("final public String " + method.getName() + "() {");
-            sw.indent();
-            sw.println("return json().getString(" + quotedFieldName(method) + ");");
-            sw.outdent();
-            sw.println("}");
-          } else {
-            sw.println("final public " + method.getReturnType().getQualifiedSourceName() + " " +
-                method.getName() + "" +
-                "() {");
-            sw.indent();
-            sw.println("return Util.reinterpret_cast(json().get(" + quotedFieldName(method) + "))" +
-                ";");
-            sw.outdent();
-            sw.println("}");
-            // handle arrays
-            // handle nested models
-          }
-        }
-      } else if (isSetter(method)) {
-        JPrimitiveType pType = method.getParameters()[0].getType().isPrimitive();
-        if (pType != null) {
-          if (pType != JPrimitiveType.BOOLEAN) {
-            sw.println(
-                "final public " + fluentOrVoid(method) + " " + method.getName() + "(" + pType
-                    .getSimpleSourceName() +
-                    " arg) {");
-            sw.indent();
-            sw.println("json().put(" + quotedFieldName(method) + ", arg);");
-            sw.outdent();
-            sw.println("}");
-          } else if (pType == JPrimitiveType.BOOLEAN) {
-            sw.println("final public " + fluentOrVoid(method) + " "  + method.getName() + "" +
-                "(boolean "
-                + " arg) {");
-            sw.indent();
-            sw.println("json().put(" + quotedFieldName(method) + ", arg);");
-            sw.outdent();
-            sw.println("}");
-          } else {
-            // shouldn't reach here (only void left)
-            throw new UnableToCompleteException();
-          }
-        } else {
-          JClassType cType = method.getParameters()[0].getType().isClassOrInterface();
-          if (cType.isAssignableTo(stringType)) {
-            sw.println("final public void " + method.getName() + "(String arg) {");
-            sw.indent();
-            sw.println("json().put(" + quotedFieldName(method) + ", arg);");
-            sw.outdent();
-            sw.println("}");
-          } else {
-            String paramType =
-                method.getParameters()[0].getType().getQualifiedSourceName();
-            sw.println("final public " + fluentOrVoid(method) + " " + method.getName() + "(" +
-                paramType +
-                " arg)" +
-                " {");
-            sw.indent();
-            String arg = "Util.<" + paramType + ">reinterpret_cast(arg)";
-            sw.println("json().put(" + quotedFieldName(method) + ", " + arg + ");");
-            sw.outdent();
-            sw.println("}");
-            // handle arrays
-            // handle nested models
-          }
-        }
-      }
-    }
     sw.commit(logger);
     return typeName;
   }
 
-  private String fluentOrVoid(JMethod method) {
+    private void generateBeanImpl(TreeLogger logger, GeneratorContext context, JClassType scopeClass, String simpleName, SourceWriter sw) throws UnableToCompleteException {
+        // constructor
+        sw.println("protected " + simpleName + "() {}");
+
+        // getters and setters
+        for (JMethod method : scopeClass.getMethods()) {
+          if (isGetter(method)) {
+            JPrimitiveType pType = method.getReturnType().isPrimitive();
+            if (pType != null) {
+              if (pType != JPrimitiveType.BOOLEAN) {
+                sw.println("final public " + pType.getSimpleSourceName() + " " + method.getName() + "" +
+                    "() {");
+                sw.indent();
+                sw.println("return (" + pType.getSimpleSourceName() + ") json().getNumber(" +
+                    quotedFieldName(method) + ");");
+                sw.outdent();
+                sw.println("}");
+              } else if (pType == JPrimitiveType.BOOLEAN) {
+                sw.println("final public boolean " + method.getName() + "() {");
+                sw.indent();
+                sw.println("return json().getBoolean(" + quotedFieldName(method) + ");");
+                sw.outdent();
+                sw.println("}");
+              } else {
+                // shouldn't reach here (only void left)
+                throw new UnableToCompleteException();
+              }
+            } else {
+              JClassType cType = method.getReturnType().isClassOrInterface();
+              if (cType.isAssignableTo(stringType)) {
+                sw.println("final public String " + method.getName() + "() {");
+                sw.indent();
+                sw.println("return json().getString(" + quotedFieldName(method) + ");");
+                sw.outdent();
+                sw.println("}");
+              } else {
+                sw.println("final public " + method.getReturnType().getParameterizedQualifiedSourceName() + " " +
+                    method.getName() + "" +
+                    "() {");
+                sw.indent();
+                generateDependentType(logger, context, method.getReturnType().isClassOrInterface());
+                sw.println("return Util.reinterpret_cast(json().get(" + quotedFieldName(method) + "))" +
+                    ";");
+                sw.outdent();
+                sw.println("}");
+                // handle arrays
+                // handle nested models
+              }
+            }
+          } else if (isSetter(method)) {
+            JPrimitiveType pType = method.getParameters()[0].getType().isPrimitive();
+            if (pType != null) {
+              if (pType != JPrimitiveType.BOOLEAN) {
+                sw.println(
+                    "final public " + fluentOrVoid(method) + " " + method.getName() + "(" + pType
+                        .getSimpleSourceName() +
+                        " arg) {");
+                sw.indent();
+                sw.println("json().put(" + quotedFieldName(method) + ", arg);");
+                maybeFluentReturn(sw, method);
+                sw.outdent();
+                sw.println("}");
+              } else if (pType == JPrimitiveType.BOOLEAN) {
+                sw.println("final public " + fluentOrVoid(method) + " "  + method.getName() + "" +
+                    "(boolean "
+                    + " arg) {");
+                sw.indent();
+                sw.println("json().put(" + quotedFieldName(method) + ", arg);");
+                maybeFluentReturn(sw, method);
+                sw.outdent();
+                sw.println("}");
+              } else {
+                // shouldn't reach here (only void left)
+                throw new UnableToCompleteException();
+              }
+            } else {
+              JClassType cType = method.getParameters()[0].getType().isClassOrInterface();
+              if (cType.isAssignableTo(stringType)) {
+                sw.println("final public " + fluentOrVoid(method) + " " + method.getName() + "(String arg) {");
+                sw.indent();
+                sw.println("json().put(" + quotedFieldName(method) + ", arg);");
+                maybeFluentReturn(sw, method);
+                sw.outdent();
+                sw.println("}");
+              } else {
+                String paramType =
+                    method.getParameters()[0].getType().getParameterizedQualifiedSourceName();
+                sw.println("final public " + fluentOrVoid(method) + " " + method.getName() + "(" +
+                    paramType +
+                    " arg)" +
+                    " {");
+                sw.indent();
+                generateDependentType(logger, context, method.getReturnType().isClassOrInterface());
+
+                String arg = "Util.<JsonObject>reinterpret_cast(arg)";
+                sw.println("json().put(" + quotedFieldName(method) + ", " + arg + ");");
+                maybeFluentReturn(sw, method);
+                sw.outdent();
+                sw.println("}");
+                // handle arrays
+                // handle nested models
+              }
+            }
+          }
+        }
+    }
+
+    private void generateDependentType(TreeLogger logger, GeneratorContext context, JClassType classOrInterface) throws UnableToCompleteException {
+        if (classOrInterface != null) {
+            if (classOrInterface.isAssignableTo(scopeType)) {
+                generateScope(logger, context, classOrInterface);
+            } else if (classOrInterface.isAssignableTo(modelType)) {
+                generateModelType(logger, context, classOrInterface);
+            } else if (classOrInterface.isAssignableTo(arrayOfType) &&
+                    classOrInterface.isParameterized() != null) {
+              generateDependentType(logger, context, classOrInterface.isParameterized().getTypeArgs()[0]);
+            }
+        }
+    }
+
+    private void maybeFluentReturn(SourceWriter sw, JMethod method) {
+        if (method.getReturnType() != JPrimitiveType.VOID) {
+            sw.println("return this;");
+        }
+    }
+
+    private String fluentOrVoid(JMethod method) {
     return method.getReturnType() != JPrimitiveType.VOID ? method.getEnclosingType()
         .getSimpleSourceName() : "void";
   }
 
   private String quotedFieldName(JMethod method) {
-    String name = method.getName().substring(3);
+    String name = method.getName().substring(isBeanStyle(method) ? 3 : 0);
     return "\"" + Character.toLowerCase(name.charAt(0)) + name.substring(1) + "\"";
   }
 
-  private JMethod findInitMethod(JClassType type, TreeLogger logger)
+    private boolean isBeanStyle(JMethod method) {
+        return method.getName().startsWith("get") || method.getName().startsWith("set");
+    }
+
+    private JMethod findInitMethod(JClassType type, TreeLogger logger)
       throws UnableToCompleteException {
     JMethod onInit = null;
     for (JMethod method : type.getMethods()) {

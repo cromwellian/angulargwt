@@ -8,31 +8,31 @@ import elemental.util.ArrayOf;
  * TodoScope declaration.  Follows the {@link com.google.gwt.angular.client.Model} spec for setting up fields on the scope object.
  */
 public interface TodoScope extends Scope<TodoScope> {
-  int getRemainingCount();
+  int remainingCount();
 
-  TodoScope setRemainingCount(int count);
+  TodoScope remainingCount(int count);
 
-  int getDoneCount();
+  int doneCount();
 
-  TodoScope setDoneCount(int count);
+  TodoScope doneCount(int count);
 
-  boolean getAllChecked();
+  boolean allChecked();
 
-  TodoScope setAllChecked(boolean b);
+  TodoScope allChecked(boolean b);
 
-  Todo getEditedTodo();
+  Todo editedTodo();
 
-  TodoScope setEditedTodo(Todo editedTodo);
+  TodoScope editedTodo(Todo editedTodo);
 
-  String getNewTodo();
+  String newTodo();
 
-  TodoScope setNewTodo(String newTodo);
+  TodoScope newTodo(String newTodo);
 
-  ArrayOf<Todo> getTodos();
+  ArrayOf<Todo> todos();
 
-  TodoScope setTodos(ArrayOf<Todo> items);
+  TodoScope todos(ArrayOf<Todo> items);
 
-  TodoScope setStatusFilter(Todo statusFilter);
+  TodoScope statusFilter(Todo statusFilter);
 
-  TodoScope setLocation(Location location);
+  TodoScope location(Location location);
 }
