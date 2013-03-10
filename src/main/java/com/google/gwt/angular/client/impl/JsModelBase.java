@@ -3,7 +3,6 @@ package com.google.gwt.angular.client.impl;
 import com.google.gwt.angular.client.Model;
 import com.google.gwt.angular.client.Util;
 import com.google.gwt.core.client.JavaScriptObject;
-import elemental.js.json.JsJsonObject;
 import elemental.json.JsonObject;
 
 /**

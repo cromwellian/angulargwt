@@ -1,12 +1,7 @@
 package com.google.gwt.angular.client.todomvc;
 
 import com.google.gwt.angular.client.AngularApp;
-import com.google.gwt.angular.client.Factory;
-import com.google.gwt.angular.client.Util;
 import com.google.gwt.core.client.GWT;
-import elemental.client.Browser;
-
-import static com.google.gwt.angular.client.Util.make;
 
 /**
  * Entry point for Angular TodoMvc App.

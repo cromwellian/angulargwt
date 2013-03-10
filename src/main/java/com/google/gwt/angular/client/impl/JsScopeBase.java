@@ -11,9 +11,9 @@ public class JsScopeBase<T extends Scope<T>> extends JsModelBase<T> implements S
   }
 
   final public native <S> void $watch(String expr, WatchFunction<S> func) /*-{
-     this.$watch(expr, function(newVal) {
-       func.@com.google.gwt.angular.client.WatchFunction::exec(Ljava/lang/Object;)(newVal);
-     });
+      this.$watch(expr, function (newVal) {
+          func.@com.google.gwt.angular.client.WatchFunction::exec(Ljava/lang/Object;)(newVal);
+      });
   }-*/;
 
   final public native void $apply(String expr) /*-{

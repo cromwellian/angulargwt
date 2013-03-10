@@ -1,7 +1,5 @@
 package com.google.gwt.angular.client;
 
-import elemental.json.JsonValue;
-
 /**
  * Function called when a watch event triggers.
  */

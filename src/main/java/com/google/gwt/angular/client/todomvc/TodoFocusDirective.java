@@ -1,7 +1,6 @@
 package com.google.gwt.angular.client.todomvc;
 
 import com.google.gwt.angular.client.*;
-import com.google.gwt.angular.client.impl.JsNgTimeout;
 import elemental.json.JsonObject;
 import elemental.json.JsonValue;
 import elemental.util.ArrayOf;
@@ -17,21 +16,21 @@ public class TodoFocusDirective implements Directive {
    */
 
   public void onFocus(NgTimeout timeout) {
-    this.timeout =  timeout;
+    this.timeout = timeout;
   }
 
   @NgDirective("todoFocus")
   public void focus(TodoScope scope, final ArrayOf<NgElement> element, JsonObject attrs) {
     scope.$watch(attrs.getString("todoFocus"), new WatchFunction<JsonValue>() {
       public void exec(JsonValue value) {
-         if (!value.asBoolean()) {
-           timeout.schedule(new Runnable() {
+        if (!value.asBoolean()) {
+          timeout.schedule(new Runnable() {
 
-             public void run() {
-               element.get(0).focus();
-             }
-           }, 0, false);
-         }
+            public void run() {
+              element.get(0).focus();
+            }
+          }, 0, false);
+        }
       }
     });
   }

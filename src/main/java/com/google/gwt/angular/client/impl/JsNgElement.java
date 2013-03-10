@@ -11,8 +11,8 @@ public class JsNgElement extends JsElement implements NgElement {
   }
 
   final public native void bind(String eventType, Runnable func) /*-{
-    this.bind(eventType, function() {
-      func.@java.lang.Runnable::run()();
-    });
+      this.bind(eventType, function () {
+          func.@java.lang.Runnable::run()();
+      });
   }-*/;
 }

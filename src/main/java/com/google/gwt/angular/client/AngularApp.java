@@ -6,7 +6,6 @@ import elemental.dom.TimeoutHandler;
 import elemental.events.Event;
 import elemental.events.EventListener;
 import elemental.html.ScriptElement;
-import elemental.html.Window;
 import elemental.js.html.JsWindow;
 
 /**
@@ -40,7 +39,7 @@ public abstract class AngularApp implements EntryPoint {
   }
 
   private native JsWindow getModuleWindow() /*-{
-    return window;
+      return window;
   }-*/;
 
   /**
