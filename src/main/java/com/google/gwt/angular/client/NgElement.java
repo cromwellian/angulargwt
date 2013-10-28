@@ -8,4 +8,6 @@ import elemental.dom.Element;
 @NgInject(name = "$element")
 public interface NgElement extends Element {
   void bind(String evt, Runnable run);
+
+  <T> T inheritedData(String dataName);
 }

@@ -1,5 +1,6 @@
 package com.google.gwt.angular.client;
 
+import com.google.gwt.angular.client.impl.AngularModuleBase;
 import com.google.gwt.core.client.EntryPoint;
 import elemental.client.Browser;
 import elemental.dom.TimeoutHandler;
@@ -7,6 +8,7 @@ import elemental.events.Event;
 import elemental.events.EventListener;
 import elemental.html.ScriptElement;
 import elemental.js.html.JsWindow;
+import elemental.js.util.JsArrayOfString;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -24,10 +26,14 @@ public abstract class AngularApp implements EntryPoint {
     se.setOnload(new EventListener() {
       public void handleEvent(Event evt) {
         unbind();
-        main();
+        final AngularModule[] modules = main();
+        final JsArrayOfString moduleNames = JsArrayOfString.create();
+        for (int i = 0; i < modules.length; i++) {
+          moduleNames.push(((AngularModuleBase) modules[i]).moduleName());
+        }
         getModuleWindow().setTimeout(new TimeoutHandler() {
           public void onTimeoutHandler() {
-            bootstrap();
+            bootstrap(moduleNames);
           }
         }, 500);
       }
@@ -45,9 +51,9 @@ public abstract class AngularApp implements EntryPoint {
   /**
    * Override this and invoke GWT.create() on your modules.
    */
-  protected abstract void main();
+  protected abstract AngularModule[] main();
 
-  private native void bootstrap() /*-{
-      $wnd.angular.bootstrap($doc, ['todomvc']);
+  private native void bootstrap(JsArrayOfString moduleNames) /*-{
+      $wnd.angular.bootstrap($doc, moduleNames);
   }-*/;
 }

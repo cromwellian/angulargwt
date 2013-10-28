@@ -9,6 +9,7 @@ package com.google.gwt.angular.client;
     basetype = Scope.class)
 public interface Scope<T extends Scope<T>> extends Model<T> {
   <S> void $watch(String expr, WatchFunction<S> func);
+  <S> void $watch(String expr, WatchFunction<S> func, boolean objEq);
 
   void $apply(String expr);
 }

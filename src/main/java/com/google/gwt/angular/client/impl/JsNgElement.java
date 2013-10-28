@@ -15,4 +15,8 @@ public class JsNgElement extends JsElement implements NgElement {
           func.@java.lang.Runnable::run()();
       });
   }-*/;
+
+  final public native <T> T inheritedData(String dataType) /*-{
+      return this.inheritedData(dataType);
+  }-*/;
 }

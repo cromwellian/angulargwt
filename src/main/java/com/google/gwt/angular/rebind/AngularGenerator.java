@@ -2,6 +2,7 @@ package com.google.gwt.angular.rebind;
 
 import com.google.common.base.Joiner;
 import com.google.gwt.angular.client.*;
+import com.google.gwt.angular.client.impl.AngularModuleBase;
 import com.google.gwt.angular.client.impl.JsModelBase;
 import com.google.gwt.angular.client.impl.JsScopeBase;
 import com.google.gwt.core.client.GWT;
@@ -142,6 +143,7 @@ public class AngularGenerator extends Generator {
     fac.addImport(GWT.class.getName());
     fac.addImport(Util.class.getName());
     fac.addImplementedInterface(AngularModule.class.getName());
+    fac.setSuperclass(AngularModuleBase.class.getName());
     PrintWriter pw = context.tryCreate(logger, type.getPackage().getName(),
         simpleName);
     SourceWriter sw = null;
@@ -218,6 +220,7 @@ public class AngularGenerator extends Generator {
                 }
               }
               ArrayList<String> params = new ArrayList<String>();
+
               if (initMethod != null) {
                 for (JParameter param : initMethod.getParameters()) {
                   JClassType pType = param.getType().isClassOrInterface();
@@ -234,15 +237,45 @@ public class AngularGenerator extends Generator {
               String paramString = Joiner.on(",").join(params);
               sw.println(paramString + ") {");
               sw.indent();
-              sw.println("return function(scope, elem, attrs) {");
+              sw.println("return { ");
+              sw.indent();
+              ArrayList<String> linkPassedParams = new ArrayList<String>();
+              linkPassedParams.add("scope");
+              linkPassedParams.add("element");
+              linkPassedParams.add("attrs");
+              ArrayList<String> requires = new ArrayList<String>();
+              int requireCount = 0;
+              for (JParameter p : method.getParameters()) {
+                JClassType lpType = p.getType().isClassOrInterface();
+                if (lpType != null) {
+                  NgInject requiresInject = lpType.getAnnotation(NgInject.class);
+                  if (requiresInject != null) {
+                    if ("$scope".equals(requiresInject.name())) {
+                      continue;
+                    }
+                    linkPassedParams.add("requires[" + requireCount +"]");
+                    requireCount++;
+                    requires.add(requiresInject.name());
+                  }
+                }
+              }
+              String linkArgs = "(scope,element,attrs" + (requireCount > 0 ? ", " +
+                  "requires" : "") +")";
+              if (!requires.isEmpty()) {
+                sw.println("require: ['" + Joiner.on("', '").join(requires) + "'],");
+              }
+              sw.println("link: function" + linkArgs + " {");
               sw.indent();
               sw.println("var directive = @" + dType.getQualifiedSourceName() + "::new()();");
               if (initMethod != null) {
                 sw.println("directive." + initMethod.getJsniSignature() + "(" + paramString + ");");
               }
-              sw.println("directive." + method.getJsniSignature() + "(scope, elem, attrs);");
-              sw.println("};");
+              sw.println("directive." + method.getJsniSignature() + "(" + Joiner.on("," +
+                  "").join(linkPassedParams)+");");
+              sw.println("}");
               sw.outdent();
+              sw.outdent();
+              sw.println("};");
               sw.outdent();
               sw.println("});");
             }
@@ -252,6 +285,12 @@ public class AngularGenerator extends Generator {
       }
     }
     sw.println("}-*/;");
+
+    sw.println("public String moduleName() {");
+    sw.indent();
+    sw.println("return \"" + modName + "\";");
+    sw.outdent();
+    sw.println("}");
     sw.outdent();
     sw.commit(logger);
     return typeName;

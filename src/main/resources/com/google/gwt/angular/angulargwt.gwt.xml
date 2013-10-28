@@ -4,7 +4,7 @@
     <inherits name="elemental.Elemental"/>
 
     <!-- Specify the app entry point class.                         -->
-    <entry-point class='com.google.gwt.angular.client.todomvc.TodoApp'/>
+        <entry-point class='com.google.gwt.angular.client.tipcalc.TipCalcApp'/>
     <generate-with class="com.google.gwt.angular.rebind.AngularGenerator">
         <when-type-assignable class="com.google.gwt.angular.client.Model"/>
     </generate-with>
@@ -17,6 +17,12 @@
     <generate-with class="com.google.gwt.angular.rebind.AngularGenerator">
         <when-type-assignable class="com.google.gwt.angular.client.AngularModule"/>
     </generate-with>
+
+    <inherits name="org.hibernate.validator.HibernateValidator" />
+    <replace-with
+            class="com.google.gwt.angular.client.tipcalc.TipCalcValidationFactory">
+        <when-type-is class="javax.validation.ValidatorFactory" />
+    </replace-with>
 
     <!-- Specify the paths for translatable code                    -->
     <source path='client'/>
