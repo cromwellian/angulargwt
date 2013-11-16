@@ -19,7 +19,7 @@
     <!--                                           -->
     <title>Web Application Starter Project</title>
 
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular.min.js"></script>
 
     <!--                                           -->
     <!-- This script loads your compiled module.   -->
@@ -47,7 +47,7 @@
         <input id="toggle-all" type="checkbox" ng-model="allChecked" ng-click="markAll(allChecked)">
         <label for="toggle-all">Mark all as complete</label>
         <ul id="todo-list">
-            <li ng-repeat="todo in todos | filter:statusFilter"
+            <li ng-repeat="todo in todos track by $index | filter:statusFilter"
                 ng-class="{completed: todo.completed, editing: todo == editedTodo}">
                 <div class="view">
                     <input class="toggle" type="checkbox" ng-model="todo.completed">
