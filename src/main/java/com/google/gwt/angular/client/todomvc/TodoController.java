@@ -77,7 +77,7 @@ public class TodoController extends AngularController<TodoScope> {
   }
 
   public void removeTodo(Todo todo) {
-    todos.splice(todos.indexOf(todo), 1);
+    todos.remove(todo);
   }
 
   public void markAll(boolean done) {

@@ -250,7 +250,8 @@ public class AngularGenerator extends Generator {
                 if (lpType != null) {
                   NgInject requiresInject = lpType.getAnnotation(NgInject.class);
                   if (requiresInject != null) {
-                    if ("$scope".equals(requiresInject.name())) {
+                    if ("$scope".equals(requiresInject.name())
+                      || "$element".equals(requiresInject.name())) {
                       continue;
                     }
                     linkPassedParams.add("requires[" + requireCount +"]");
@@ -434,7 +435,7 @@ public class AngularGenerator extends Generator {
       if (i > 0) {
         args.append(", ");
       }
-      args.append("arg" + i);
+      args.append("arg").append(i);
     }
     return args.toString();
   }
