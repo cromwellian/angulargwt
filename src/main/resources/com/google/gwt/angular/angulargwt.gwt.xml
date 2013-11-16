@@ -3,8 +3,6 @@
 
     <inherits name="elemental.Elemental"/>
 
-    <!-- Specify the app entry point class.                         -->
-        <entry-point class='com.google.gwt.angular.client.tipcalc.TipCalcApp'/>
     <generate-with class="com.google.gwt.angular.rebind.AngularGenerator">
         <when-type-assignable class="com.google.gwt.angular.client.Model"/>
     </generate-with>
