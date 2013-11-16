@@ -14,7 +14,7 @@
 
     <properties>
         <!-- Convenience property to set the GWT version -->
-        <gwtVersion>2.5.1-rc1</gwtVersion>
+        <gwtVersion>2.5.1</gwtVersion>
         <!-- GWT needs at least java 1.5 -->
         <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -53,7 +53,7 @@
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-elemental</artifactId>
-            <version>2.5.1-rc1</version>
+            <version>${gwtVersion}</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -135,7 +135,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>gwt-maven-plugin</artifactId>
-                <version>2.5.1-rc1</version>
+                <version>${gwtVersion}</version>
                 <executions>
                     <execution>
                         <goals>
