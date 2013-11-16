@@ -5,26 +5,28 @@
 <!-- with a "Quirks Mode" doctype may lead to some -->
 <!-- differences in layout.                        -->
 
-<html lang="en" ng-app="todomvc">
+<html lang="en">
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta charset='utf-8' />
 
     <!--                                                               -->
     <!-- Consider inlining CSS to reduce the number of requested files -->
     <!--                                                               -->
-    <link type="text/css" rel="stylesheet"
-          href="http://addyosmani.github.com/todomvc/assets/base.css">
+    <link rel="stylesheet" href="base.css">
     <!--                                           -->
     <!-- Any title is fine                         -->
     <!--                                           -->
     <title>Web Application Starter Project</title>
+
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
 
     <!--                                           -->
     <!-- This script loads your compiled module.   -->
     <!-- If you add any GWT meta tags, they must   -->
     <!-- be added before this line.                -->
     <!--                                           -->
-    <script type="text/javascript" language="javascript" src="angulargwt.nocache.js"></script>
+    <script src="angulargwt.nocache.js"></script>
 </head>
 
 <!--                                           -->
@@ -60,7 +62,8 @@
         </ul>
     </section>
     <footer id="footer" ng-show="todos.length" ng-cloak>
-			<span id="todo-count"><strong>{{remainingCount}}</strong>
+			<span id="todo-count">
+                <strong>{{remainingCount}}</strong>
 				<ng-pluralize count="remainingCount"
                               when="{ one: 'item left', other: 'items left' }"></ng-pluralize>
 			</span>
@@ -94,7 +97,8 @@
     <p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
 
     <p style="color: black">
-        <a href="http://github.com/cromwellian/angulargwt">Using AngularGWT</a></p>
+        <a href="http://github.com/cromwellian/angulargwt">Using AngularGWT</a>
+    </p>
 </footer>
 </body>
 </html>
