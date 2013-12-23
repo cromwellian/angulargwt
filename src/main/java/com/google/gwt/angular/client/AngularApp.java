@@ -12,7 +12,6 @@ public abstract class AngularApp implements EntryPoint {
   /**
    * This is the entry point method.
    */
-  @Override
   public final void onModuleLoad() {
     final AngularModule[] modules = main();
     final JsArrayOfString moduleNames = JsArrayOfString.create();
