@@ -27,4 +27,6 @@
     <source path='shared'/>
     <set-configuration-property name="user.agent.runtimeWarning" value="false"/>
     <set-property name="compiler.stackMode" value="strip"/>
+    
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular.min.js"></script>
 </module>
