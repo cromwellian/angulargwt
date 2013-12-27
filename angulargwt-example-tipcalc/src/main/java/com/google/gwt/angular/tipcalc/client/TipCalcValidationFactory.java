@@ -1,4 +1,4 @@
-package com.google.gwt.angular.client.tipcalc;
+package com.google.gwt.angular.tipcalc.client;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.validation.client.AbstractGwtValidatorFactory;

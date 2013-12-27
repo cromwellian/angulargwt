@@ -1,4 +1,4 @@
-package com.google.gwt.angular.client.todomvc;
+package com.google.gwt.angular.todomvc.client;
 
 import com.google.gwt.angular.client.AngularModule;
 import com.google.gwt.angular.client.NgDepends;

@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>angulargwt-example-tipcalc</artifactId>
 
-	<packaging>gwt-app</packaging>
+	<packaging>war</packaging>
 	<name>AngularJS Bridge to GWT - Tip Calc Example</name>
 
 	<url>https://github.com/h0ru5/angulargwt</url>
@@ -21,8 +21,16 @@
 			<plugin>
 				<groupId>net.ltgt.gwt.maven</groupId>
 				<artifactId>gwt-maven-plugin</artifactId>
+				   <executions>
+          <execution>
+            <goals>
+              <goal>generate-module</goal>
+              <goal>compile</goal>
+            </goals>
+          </execution>
+        </executions>
 				<configuration>
-					<moduleName>com.google.gwt.angular.tipcalc</moduleName>
+					<moduleName>com.google.gwt.angular.tipcalc.Example</moduleName>
 				</configuration>
 			</plugin>
 		</plugins>

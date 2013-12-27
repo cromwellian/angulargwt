@@ -1,4 +1,4 @@
-package com.google.gwt.angular.client.tipcalc;
+package com.google.gwt.angular.tipcalc.client;
 
 import com.google.gwt.angular.client.AngularController;
 import com.google.gwt.angular.client.NgInject;

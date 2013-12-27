@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module rename-to='angulargwt'>
+<module rename-to="tipcalc">
 
     <inherits name="com.google.gwt.angular.angulargwt"/>
+    <inherits name="elemental.Elemental"/>
 
     <!-- Specify the app entry point class.                         -->
     <entry-point class='com.google.gwt.angular.client.tipcalc.TipCalcApp'/>
-
 </module>
