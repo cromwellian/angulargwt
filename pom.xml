@@ -9,7 +9,7 @@
 
 	<groupId>com.github.h0ru5.gwt</groupId>
 	<artifactId>angulargwt-parent</artifactId>
-	<version>0.9</version>
+	<version>0.10-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>AngularGWT Parent</name>
 
