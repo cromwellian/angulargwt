@@ -1,0 +1,6 @@
+AngularGWT: Write Angular Controllers, Filters, Directives in GWT.
+
+WARNING: Recommended that you use SuperDevMode develop, completely untested in DevMode. Uses lots of compiler casting 
+magic to reduce code size, but is likely to break when running inside a JVM.
+
+This project contains an example Todo-application
