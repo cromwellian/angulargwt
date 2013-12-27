@@ -1,0 +1,13 @@
+# AngularGWT: Write Angular Controllers, Filters, Directives in GWT.
+
+WARNING: Recommended that you use SuperDevMode develop, completely untested in DevMode. Uses lots of compiler casting 
+magic to reduce code size, but is likely to break when running inside a JVM.
+
+This build is only the lib itself, withbout examples
+
+Currently undone: 
+* Maven Archetype to auto-generate starter project.
+* More JavaDoc
+* Unit tests.
+* Transitive dependencies, modules that depend on modules.
+* JSO wrappers for the rest of the AngularJs API. I only implemented that which was needed for TodoMVC.

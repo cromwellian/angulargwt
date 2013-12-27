@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to='angulargwt'>
+
+    <inherits name="elemental.Elemental"/>
+
+    <generate-with class="com.google.gwt.angular.rebind.AngularGenerator">
+        <when-type-assignable class="com.google.gwt.angular.client.Model"/>
+    </generate-with>
+    <generate-with class="com.google.gwt.angular.rebind.AngularGenerator">
+        <when-type-assignable class="com.google.gwt.angular.client.Scope"/>
+    </generate-with>
+    <generate-with class="com.google.gwt.angular.rebind.AngularGenerator">
+        <when-type-assignable class="com.google.gwt.angular.client.AngularController"/>
+    </generate-with>
+    <generate-with class="com.google.gwt.angular.rebind.AngularGenerator">
+        <when-type-assignable class="com.google.gwt.angular.client.AngularModule"/>
+    </generate-with>
+
+    <inherits name="org.hibernate.validator.HibernateValidator" />
+    <replace-with
+            class="com.google.gwt.angular.client.tipcalc.TipCalcValidationFactory">
+        <when-type-is class="javax.validation.ValidatorFactory" />
+    </replace-with>
+
+    <!-- Specify the paths for translatable code                    -->
+    <source path='client'/>
+    <source path='shared'/>
+    <set-configuration-property name="user.agent.runtimeWarning" value="false"/>
+    <set-property name="compiler.stackMode" value="strip"/>
+    
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular.min.js"></script>
+</module>
