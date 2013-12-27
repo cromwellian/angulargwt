@@ -3,10 +3,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>angulargwt-example-todo</artifactId>
+	<artifactId>angulargwt-example-tipcalc</artifactId>
 
 	<packaging>gwt-app</packaging>
-	<name>AngularJS Bridge to GWT - Todo Example</name>
+	<name>AngularJS Bridge to GWT - Tip Calc Example</name>
 
 	<url>https://github.com/h0ru5/angulargwt</url>
 
@@ -23,7 +23,7 @@
 				<groupId>net.ltgt.gwt.maven</groupId>
 				<artifactId>gwt-maven-plugin</artifactId>
 				<configuration>
-					<moduleName>com.google.gwt.angular.todomvc</moduleName>
+					<moduleName>com.google.gwt.angular.tipcalc</moduleName>
 				</configuration>
 			</plugin>
 		</plugins>
