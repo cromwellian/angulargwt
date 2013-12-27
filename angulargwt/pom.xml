@@ -2,63 +2,34 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-	<!-- POM file generated with GWT webAppCreator -->
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>angulargwt</artifactId>
-	
+
 	<packaging>gwt-lib</packaging>
-	<name>AngularJS Bridge to GWT</name>
-
-	<properties>
-		<gwtVersion>2.5.1</gwtVersion>
-		<webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
-
-	<build>
-	    <plugins>
-      <plugin>
-        <groupId>net.ltgt.gwt.maven</groupId>
-        <artifactId>gwt-maven-plugin</artifactId>
-        <configuration>
-          <moduleName>com.google.gwt.angular.angulargwt</moduleName>
-        </configuration>
-      </plugin>
-    </plugins>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.1</version>
-					<configuration>
-						<source>1.6</source>
-						<target>1.6</target>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-gpg-plugin</artifactId>
-					<executions>
-						<execution>
-							<id>sign-artifacts</id>
-							<phase>verify</phase>
-							<goals>
-								<goal>sign</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
-				<plugin>
-					<groupId>net.ltgt.gwt.maven</groupId>
-					<artifactId>gwt-maven-plugin</artifactId>
-					<version>1.0-alpha-2</version>
-					<extensions>true</extensions>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-	</build>
 	
+	<name>AngularJS Bridge to GWT</name>
+	<url>https://github.com/h0ru5/angulargwt</url>
+	<description>Fork of AngularGWT based on ltgt's maven-plugin</description>
+	
+	<parent>
+		<groupId>com.github.h0ru5.gwt</groupId>
+		<artifactId>angulargwt-parent</artifactId>
+		<version>1.1-SNAPSHOT</version>
+		<relativePath>..</relativePath>
+	</parent>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>net.ltgt.gwt.maven</groupId>
+				<artifactId>gwt-maven-plugin</artifactId>
+				<configuration>
+					<moduleName>com.google.gwt.angular.angulargwt</moduleName>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.google.gwt</groupId>
@@ -163,20 +134,4 @@
 
 	</dependencies>
 
-	
-
-
-	<url>https://github.com/h0ru5/angulargwt</url>
-	<description>Fork of AngularGWT based on ltgt's maven-plugin</description>
-	<scm>
-		<url>git@github.com:h0ru5/angulargwt.git</url>
-		<connection>scm:git:git@github.com:h0ru5/angulargwt.git</connection>
-		<developerConnection>scm:git:git@github.com:h0ru5/angulargwt.git</developerConnection>
-	</scm>
-	<parent>
-		<groupId>com.github.h0ru5.gwt</groupId>
-		<artifactId>angulargwt-parent</artifactId>
-		<version>1.1-SNAPSHOT</version>
-		<relativePath>..</relativePath>
-	</parent>
 </project>

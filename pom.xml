@@ -19,6 +19,7 @@
 
 	<properties>
 		<gwtVersion>2.5.1</gwtVersion>
+		<webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
@@ -27,7 +28,6 @@
 		<connection>scm:git:git@github.com:h0ru5/angulargwt.git</connection>
 		<developerConnection>scm:git:git@github.com:h0ru5/angulargwt.git</developerConnection>
 	</scm>
-
 
 	<licenses>
 		<license>
