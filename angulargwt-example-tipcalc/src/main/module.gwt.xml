@@ -5,5 +5,5 @@
     <inherits name="elemental.Elemental"/>
 
     <!-- Specify the app entry point class.                         -->
-    <entry-point class='com.google.gwt.angular.client.tipcalc.TipCalcApp'/>
+    <entry-point class='com.google.gwt.angular.tipcalc.client.TipCalcApp'/>
 </module>
