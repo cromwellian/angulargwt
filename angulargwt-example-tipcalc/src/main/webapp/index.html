@@ -44,8 +44,8 @@
             <input name="billAmount" placeholder="Enter Bill Amount"
                    ng-model="tipModel.billAmount"
                    autofocus><br>
-            <span ng-show="form.$beanErrors.billAmount">Failed bean Validation</span>
-            <span>Error: {{form.$beanErrors.billAmount}}</span>
+            <span ng-show="form.$beanErrors.billAmount">Failed bean Validation<br/>
+            Error: {{form.$beanErrors.billAmount}}</span>
             <label># of People</label>
             <input id="bill-ppl" placeholder="Number of People"
                    ng-model="tipModel.numPeople"><br>
