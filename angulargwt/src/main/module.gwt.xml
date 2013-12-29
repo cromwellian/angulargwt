@@ -24,7 +24,6 @@
 
     <!-- Specify the paths for translatable code                    -->
     <source path='client'/>
-    <source path='rebind'/>
     <set-configuration-property name="user.agent.runtimeWarning" value="false"/>
     <set-property name="compiler.stackMode" value="strip"/>
     
