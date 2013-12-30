@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>angulargwt-example-todo</artifactId>
@@ -16,6 +17,10 @@
 		<relativePath>..</relativePath>
 	</parent>
 
+	<properties>
+		<gwt.module>com.google.gwt.angular.todomvc.example</gwt.module>
+	</properties>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -30,9 +35,10 @@
 					</execution>
 				</executions>
 				<configuration>
-					<moduleName>com.google.gwt.angular.todomvc.example</moduleName>
+					<moduleName>${gwt.module}</moduleName>
 				</configuration>
 			</plugin>
+			
 		</plugins>
 	</build>
 
@@ -41,7 +47,7 @@
 			<groupId>com.google.gwt</groupId>
 			<artifactId>gwt-servlet</artifactId>
 			<version>${gwtVersion}</version>
-			<scope>runtime</scope>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.google.gwt</groupId>
@@ -64,12 +70,13 @@
 			<groupId>com.google.gwt</groupId>
 			<artifactId>gwt-codeserver</artifactId>
 			<version>${gwtVersion}</version>
-			<scope>provided</scope>
+			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.google.gwt</groupId>
 			<artifactId>gwt-elemental</artifactId>
 			<version>${gwtVersion}</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -128,7 +135,7 @@
 			the hibernate-validator POM -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
+			<artifactId>slf4j-simple</artifactId>
 			<version>1.6.1</version>
 		</dependency>
 		<dependency>
@@ -140,7 +147,6 @@
 			<groupId>com.github.h0ru5.gwt</groupId>
 			<artifactId>angulargwt</artifactId>
 			<version>1.1.1-SNAPSHOT</version>
-			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 

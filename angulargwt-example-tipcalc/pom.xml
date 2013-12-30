@@ -16,6 +16,11 @@
 		<relativePath>..</relativePath>
 	</parent>
 
+	<properties>
+		<gwt.module>com.google.gwt.angular.tipcalc.Example</gwt.module>
+	</properties>
+
+
 	<build>
 		<plugins>
 			<plugin>
@@ -30,7 +35,7 @@
           </execution>
         </executions>
 				<configuration>
-					<moduleName>com.google.gwt.angular.tipcalc.Example</moduleName>
+					<moduleName>${gwt.module}</moduleName>
 				</configuration>
 			</plugin>
 		</plugins>
