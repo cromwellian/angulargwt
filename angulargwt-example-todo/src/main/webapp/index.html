@@ -48,7 +48,7 @@
         <label for="toggle-all">Mark all as complete</label>
         <ul id="todo-list">
             <li ng-repeat="todo in todos track by $index | filter:statusFilter"
-                ng-class="{completed: todo.completed, editing: todo == editedTodo}">
+                ng-class="{completed: todo.completed == true, editing: todo == editedTodo}">
                 <div class="view">
                     <input class="toggle" type="checkbox" ng-model="todo.completed">
                     <label ng-dblclick="editTodo(todo)">{{todo.title}}</label>
