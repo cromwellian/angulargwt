@@ -68,6 +68,7 @@ public class TodoController extends AngularController<TodoScope> {
         .setCompleted(false);
     todos.push(newTodo);
     scope.newTodo("");
+    scope.todos(todos);
   }
 
   public void doneEditing(Todo todo) {
@@ -98,6 +99,7 @@ public class TodoController extends AngularController<TodoScope> {
         result.push(todo);
       }
     }
+    todos=result;
     scope.todos(result);
   }
 }
