@@ -49,6 +49,11 @@ public class TodoController extends AngularController<TodoScope> {
         "/completed".equals(path) ?
             makeTodo().setCompleted(true) : null);
   }
+  
+  @NgWatch("statusFilter")
+  public void $watchStatusFilter(Todo statusFilter) {
+	  scope.todos(filterFilter.filter(todos,statusFilter));
+  }
 
   private Todo makeTodo() {
     return make(GWT.create(Todo.class));
