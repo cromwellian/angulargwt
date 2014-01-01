@@ -93,12 +93,11 @@ public class TodoController extends AngularController<TodoScope> {
   }
 
   public void clearDoneTodos() {
-    ArrayOf<Todo> result = JsArrayOf.create();
-    for (Todo todo : iterable(todos)) {
-      if (!todo.getCompleted()) {
-        result.push(todo);
-      }
-    }
+    Todo todoPredicate = makeTodo();
+    todoPredicate.setCompleted(false);
+
+    ArrayOf<Todo> result = filterFilter.filter(todos, todoPredicate);
+        
     todos=result;
     scope.todos(result);
   }
