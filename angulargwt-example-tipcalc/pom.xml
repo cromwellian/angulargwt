@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>angulargwt-example-tipcalc</artifactId>
 
-	<packaging>gwt-app</packaging>
+	<packaging>war</packaging>
 	<name>AngularJS Bridge to GWT - Tip Calc Example</name>
 
 	<url>https://github.com/h0ru5/angulargwt</url>

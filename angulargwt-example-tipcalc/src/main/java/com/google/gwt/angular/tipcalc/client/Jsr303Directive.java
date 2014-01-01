@@ -28,11 +28,13 @@ public class Jsr303Directive implements Directive {
     final NgFormController ctrl2 = ctrl;
     scope.$watch(attrs.getString("beanValidate"), new WatchFunction<Model>() {
       public void exec(Model value) {
+    	  Browser.getWindow().getConsole().log("Validating " + value.json().toJson());
         Set<ConstraintViolation<Model>> violations = validator.validate(value);
         JsonObject obj = JsJsonObject.create();
-        ctrl2.json().put("$beanErrors", obj);
+        value.json().put("$beanErrors", obj);
         if (!violations.isEmpty()) {
           for (ConstraintViolation<Model> viol : violations) {
+        	  Browser.getWindow().getConsole().log("Found violation:" + viol.getPropertyPath().toString() + ": " + viol.getMessage());
              obj.put(viol.getPropertyPath().toString(), viol.getMessage());
           }
         }

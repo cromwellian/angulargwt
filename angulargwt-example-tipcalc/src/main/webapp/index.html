@@ -17,9 +17,9 @@
     <!--                                           -->
     <!-- Any title is fine                         -->
     <!--                                           -->
-    <title>Web Application Starter Project</title>
+    <title>Tipcalc example</title>
 
-    <!-- script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular.min.js"></script>  -->
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular.min.js"></script> 
 
     <!--                                           -->
     <!-- This script loads your compiled module.   -->
@@ -35,29 +35,33 @@
 <!-- to create a completely dynamic UI.        -->
 <!--                                           -->
 <body>
-<section id="todoapp" ng-controller="TipCtrl">
+<section id="todoapp" >
     <header id="header">
         <h1>Tip Calc</h1>
 
-        <form id="form" bean-validate="tipModel">
+        <form id="form" bean-validate="tipModel" ng-controller="TipCtrl">
             <label>Bill Amount</label>
             <input name="billAmount" placeholder="Enter Bill Amount"
                    ng-model="tipModel.billAmount"
                    autofocus><br>
-            <span ng-show="form.$beanErrors.billAmount">Failed bean Validation<br/>
-            Error: {{form.$beanErrors.billAmount}}</span>
+            <p ng-show="tipModel.$beanErrors.billAmount">Failed bean Validation:
+            Error: {{tipModel.$beanErrors.billAmount}}</p>
             <label># of People</label>
             <input id="bill-ppl" placeholder="Number of People"
                    ng-model="tipModel.numPeople"><br>
+                   <p ng-show="tipModel.$beanErrors.numPeople">Failed bean Validation:
+            Error: {{tipModel.$beanErrors.billAmount}}</p>
             <label>% Tip</label>
             <input id="bill-pct" placeholder="Percentage"
                    ng-model="tipModel.percentage"><br>
+                   <p ng-show="tipModel.$beanErrors.percentage">Failed bean Validation:
+            Error: {{tipModel.$beanErrors.billAmount}}</p>
             <label>Tip Amouunt</label>
             <div>{{tipModel.tip | currency}}</div><br>
             <label>Final Bill</label>
             <div>{{tipModel.finalBill | currency}}</div><br>
             <label>Per Person</label>
-            <div>{{tipModel.finalBill / tipModel.numPeople}}</div>
+            <div>{{tipModel.finalBill / tipModel.numPeople | currency}}</div>
         </form>
     </header>
 </section>
