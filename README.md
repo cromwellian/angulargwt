@@ -1,4 +1,3 @@
-
 # AngularGWT
 Write AngularJS Controllers, Filters, Directives in GWT
 
@@ -25,7 +24,7 @@ The easiest way to build ibraries or apps is probably using a maven plugin, such
 
 Integrate the following dependency into your pom.xml (adjust version number accordingly). It is on sonatype oss and releases are mirrored into maven central.
 
-```
+```xml
 <dependency>
    <groupId>com.github.h0ru5.gwt</groupId>
    <artifactId>angulargwt</artifactId>
@@ -44,7 +43,7 @@ Every project you write will provide an **AngularJS Module**. Just extend ``Angu
 
 For example:
 
-```
+```java
 @NgName("mymodule")
 @NgDepends({MyService.class, MyFilter.class, MyController.class, MyDirective.class})
 public class MyModule implements AngularModule {
@@ -53,7 +52,7 @@ public class MyModule implements AngularModule {
 
 If you write not only a library but an **application**, you also need to provide a entry-point class. Just extend ``AngularApp`` to do so. You to override the abstract method ``main()``, which should return all referenced modules as an array.
 
-```
+```java
 public class MyApp extends AngularApp {
    @Override
    protected AngularModule[] main() {
