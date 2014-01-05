@@ -25,11 +25,13 @@ The easiest way to build ibraries or apps is probably using a maven plugin, such
 
 Integrate the following dependency into your pom.xml (adjust version number accordingly). It is on sonatype oss and releases are mirrored into maven central.
 
-     <dependency>
-        <groupId>com.github.h0ru5.gwt</groupId>
-        <artifactId>angulargwt</artifactId>
-        <version>1.1.1</version>
-    </dependency>
+```
+<dependency>
+   <groupId>com.github.h0ru5.gwt</groupId>
+   <artifactId>angulargwt</artifactId>
+   <version>1.1.1</version>
+</dependency>
+```
 
 #### manually add the lib to your project
 tbd
@@ -42,18 +44,23 @@ Every project you write will provide an **AngularJS Module**. Just extend ``Angu
 
 For example:
 
-    @NgName("mymodule")
-    @NgDepends({MyService.class, MyFilter.class, MyController.class, MyDirective.class})
-    public class MyModule implements AngularModule {}
+```
+@NgName("mymodule")
+@NgDepends({MyService.class, MyFilter.class, MyController.class, MyDirective.class})
+public class MyModule implements AngularModule {
+}
+```
 
 If you write not only a library but an **application**, you also need to provide a entry-point class. Just extend ``AngularApp`` to do so. You to override the abstract method ``main()``, which should return all referenced modules as an array.
 
-    public class MyApp extends AngularApp {
-       @Override
-       protected AngularModule[] main() {
-         return new AngularModule[] {(AngularModule) GWT.create(MyModule.class)};
-       }
-    }
+```
+public class MyApp extends AngularApp {
+   @Override
+   protected AngularModule[] main() {
+     return new AngularModule[] {(AngularModule) GWT.create(MyModule.class)};
+   }
+}
+```
 
 The template(s) are then provided in the same way as usual for AngularJS and need to include the GWT-generated script. You do not need to include angularjs from the cloud, it will be lazy-loaded if it is not found.
 
