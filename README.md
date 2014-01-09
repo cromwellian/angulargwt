@@ -65,19 +65,75 @@ The template(s) are then provided in the same way as usual for AngularJS and nee
 
 ### Implementing the different types of AngularJS components
 
-#### Controller
-tbd
-#### Model
-tbd
-#### Scope
-tbd
-#### Directive
-tbd
-#### Filter
-tbd
-#### Service
-tbd
+Refer to [AngularJS concepts][5] for a basic intro of the different types of components
 
+#### Controller
+
+tba
+
+#### Model
+A model is defined by its interface, which must extend from ``Model<>`` and use the own type as type parameter for the superinterface.
+
+The Model is generated during compilation and in code it is invoked via [deferred binding][6], which means you instatiate a Model via  ``GWT.create()``.
+
+```java
+public interface Person extends Model<Person> {
+   String getName();
+   Person setName(String name);
+   
+   //or
+   
+   int age();
+   Person age(int age); 
+}
+```
+
+#### Scope
+Similar to the Model, a Scope is defined by contract (by its interface) and generated in the compilation process.
+Note that getters and setters can be implicit or explicit and use "fluent" or "void-setter" style.
+
+```java
+public interface MyScope extends Scope<MyScope> {
+   void setPersons(ArrayOf<Person> persons);
+   ArrayOf<Person> getPersons();
+   
+   //or
+   
+   int maxPersons();
+   MyScope maxPersons(int max);
+}
+```
+#### Filter
+A Filter is implementing the Filter interface with a type parameter for the Model it is filtering. It is injectable by annotating the class with ```@NgInject(name="filterName")```.
+
+```java
+@NgInject(name = "todoFilter")
+public class TodoFilter implements Filter<Todo> {
+          
+        public ArrayOf<Todo> filter(ArrayOf<Todo> todos, Todo todoFilterArg) {
+            ArrayOf<Todo> result = JsArrayOf.create();
+            
+            //Filtering, e.g. by compairing with the Argument
+            
+            return result;
+        }
+}
+```
+
+#### Service
+A service can provide Util methods and is just implemented as POJO and annotated with the name used for injection into the controllers.
+
+```java
+@NgInject(name = "serverProxy")
+public class ServerProxy {
+    public ArrayOf<Todo> get() {...}
+    public void put(ArrayOf<Todo> todos) {...}
+}
+```
+
+#### Directive
+
+tba
 
 ## Supporting the project / to be done
 
@@ -94,7 +150,7 @@ I am happy for any legal advice on the proper licencing.
 
 ## Kudos
 
-I forked this code from [nordligulv][5], which is a fork from [cromwellian][6], I merely buffed things up a bit and added this doc.
+I forked this code from [nordligulv][7], which is a fork from [cromwellian][8], I merely buffed things up a bit and added this doc.
 
 > Written with [StackEdit](https://stackedit.io/).
 
@@ -103,5 +159,7 @@ I forked this code from [nordligulv][5], which is a fork from [cromwellian][6], 
   [2]: http://www.gwtproject.org/ "GWT"
   [3]: http://mojo.codehaus.org/gwt-maven-plugin/
   [4]: https://github.com/tbroyer/gwt-maven-plugin
-  [5]: https://github.com/nordligulv/angulargwt%20nordligulv
-  [6]: https://github.com/cromwellian/angulargwt%20cromweilian
+  [5]: http://docs.angularjs.org/guide/concepts
+  [6]: http://www.gwtproject.org/doc/latest/DevGuideCodingBasicsDeferred.html
+  [7]: https://github.com/nordligulv/angulargwt%20nordligulv
+  [8]: https://github.com/cromwellian/angulargwt%20cromweilian
