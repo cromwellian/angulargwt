@@ -67,10 +67,6 @@ The template(s) are then provided in the same way as usual for AngularJS and nee
 
 Refer to [AngularJS concepts][5] for a basic intro of the different types of components
 
-#### Controller
-
-tba
-
 #### Model
 A model is defined by its interface, which must extend from ``Model<>`` and use the own type as type parameter for the superinterface.
 
@@ -103,6 +99,31 @@ public interface MyScope extends Scope<MyScope> {
    MyScope maxPersons(int max);
 }
 ```
+
+#### Controller
+
+Controllers extend the class ``ÀngularController<>`` and refer to their scope as type argument. The name to be used in the template is specified via ```@NgInject(name="ControllerName")```.
+
+Each controller must implement the function ``onInit(Scope scope,...)``, in which it specifies the components to be injected.
+
+Watches are defined by annotating a Method with the ``@Watch`` annotation. The first parameter is the expression to be watched, the second parameter is a boolean that enforces deep object equality. The Method will be called when the watch expression changes with new and old value as parameters.
+Refer to [Angular's documentation on $watch][7] for background information.
+
+```java
+@NgInject(name = "MyCtrl")
+public class MyController extends AngularController<MyScope> {
+    public void onInit(MyScope scope, MyService service, Location Location, MyFilter filter) {...}
+
+    @NgWatch(value = "persons", objEq = true)
+    public void $watchPersons() {...}
+    
+    @NgWatch("location.path()")
+    public void $watchPath(String path) {...}
+    
+    //arbitrary functions to be called via template
+    public void clearPersons() {...}
+```
+
 #### Filter
 A Filter is implementing the Filter interface with a type parameter for the Model it is filtering. It is injectable by annotating the class with ```@NgInject(name="filterName")```.
 
@@ -150,7 +171,7 @@ I am happy for any legal advice on the proper licencing.
 
 ## Kudos
 
-I forked this code from [nordligulv][7], which is a fork from [cromwellian][8], I merely buffed things up a bit and added this doc.
+I forked this code from [nordligulv][8], which is a fork from [cromwellian][9], I merely buffed things up a bit and added this doc.
 
 > Written with [StackEdit](https://stackedit.io/).
 
@@ -161,5 +182,6 @@ I forked this code from [nordligulv][7], which is a fork from [cromwellian][8], 
   [4]: https://github.com/tbroyer/gwt-maven-plugin
   [5]: http://docs.angularjs.org/guide/concepts
   [6]: http://www.gwtproject.org/doc/latest/DevGuideCodingBasicsDeferred.html
-  [7]: https://github.com/nordligulv/angulargwt%20nordligulv
-  [8]: https://github.com/cromwellian/angulargwt%20cromweilian
+  [7]: http://docs.angularjs.org/api/ng.$rootScope.Scope#methods_$watch
+  [8]: https://github.com/nordligulv/angulargwt%20nordligulv
+  [9]: https://github.com/cromwellian/angulargwt%20cromweilian
