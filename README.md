@@ -154,7 +154,20 @@ public class ServerProxy {
 
 #### Directive
 
-tba
+Directives are defined as methods in classes that implement the tagging-interface ``Directive`` 
+(it does not provide any abstract methods)
+The  method is annotated as ``@NgDirective("name")``.
+
+```java
+public class MyDirective implements Directive {
+    
+    @NgDirective("displayPerson")
+    public void display(final MyScope scope, final NgElement element, final JsonObject attrs) {
+        //...
+    }
+    
+}
+```
 
 ## Supporting the project / to be done
 
