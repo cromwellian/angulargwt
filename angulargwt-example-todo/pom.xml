@@ -25,7 +25,6 @@
 			<plugin>
 				<groupId>net.ltgt.gwt.maven</groupId>
 				<artifactId>gwt-maven-plugin</artifactId>
-				<version>1.0-alpha-2</version>
 				<extensions>true</extensions>
 				<executions>
 					<execution>
@@ -151,4 +150,5 @@
 		</dependency>
 	</dependencies>
 
+	<groupId>com.github.h0ru5.gwt</groupId>
 </project>
