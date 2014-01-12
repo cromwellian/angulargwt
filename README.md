@@ -40,6 +40,14 @@ tbd
 #### Ivy/Gradle/...
 tbd
 
+### Inheriting the module
+This inherits declaration is needed in your &lt;yourmodule&gt;.gwt.xml 
+(note the com.google namespace)
+
+```xml
+<inherits name="com.google.gwt.angular.angulargwt" />
+```
+
 ### Implementing a module and/or an application
 Every project you write will provide an **AngularJS Module**. Just extend ``AngularModule`` and provide the module name and the dependencies with the ``@NgName`` and the ``@NgDepends`` annotations. Also put all provided components  (controllers, directives, services etc.) into the ``@NgDepends``.
 
