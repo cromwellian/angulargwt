@@ -32,6 +32,8 @@ Integrate the following dependency into your pom.xml (adjust version number acco
 </dependency>
 ```
 
+Current SNAPSHOT state: [![Build Status](https://buildhive.cloudbees.com/job/h0ru5/job/angulargwt/badge/icon)](https://buildhive.cloudbees.com/job/h0ru5/job/angulargwt/)
+
 #### manually add the lib to your project
 tbd
 
