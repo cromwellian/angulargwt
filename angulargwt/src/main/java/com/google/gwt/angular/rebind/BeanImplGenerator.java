@@ -1,20 +1,12 @@
 package com.google.gwt.angular.rebind;
 
-import java.io.PrintWriter;
-
-import com.google.gwt.angular.client.Util;
-import com.google.gwt.angular.client.impl.JsModelBase;
 import com.google.gwt.core.ext.GeneratorContext;
 import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.core.ext.typeinfo.JPrimitiveType;
-import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
-
-import elemental.json.JsonObject;
-import elemental.util.ArrayOfString;
 
 class BeanImplGenerator {
 
@@ -142,36 +134,6 @@ class BeanImplGenerator {
 		}
 	}
 
-	static String generateModelType(TreeLogger logger,
-			GeneratorContext context, AngularGwtTypes types, JClassType modelType)
-			throws UnableToCompleteException {
-		String simpleName = modelType.getName() + AngularConventions.MODELIMPL;
-		ClassSourceFileComposerFactory fac = new ClassSourceFileComposerFactory(
-				modelType.getPackage().getName(), simpleName);
-		fac.setSuperclass(JsModelBase.class.getName() + "<"
-				+ modelType.getName() + ">");
-		fac.addImport(JsonObject.class.getName());
-		fac.addImport(ArrayOfString.class.getName());
-		fac.addImport(JsModelBase.class.getName());
-		fac.addImport(Util.class.getName());
-		fac.addImplementedInterface(modelType.getQualifiedSourceName());
-		PrintWriter pw = context.tryCreate(logger, modelType.getPackage()
-				.getName(), simpleName);
-		SourceWriter sw = null;
-		String typeName = modelType.getQualifiedSourceName() + AngularConventions.MODELIMPL;
-	
-		if (pw != null) {
-			sw = fac.createSourceWriter(context, pw);
-		}
-		if (sw == null) {
-			return typeName;
-		}
-		BeanImplGenerator.generateBeanImpl(logger, context, types, modelType, simpleName, sw);
-	
-		sw.commit(logger);
-		return typeName;
-	}
-
 	private static void generateDependentType(TreeLogger logger,
 			GeneratorContext context,AngularGwtTypes types, JClassType classOrInterface)
 			throws UnableToCompleteException {
@@ -179,7 +141,7 @@ class BeanImplGenerator {
 			if (classOrInterface.isAssignableTo(types.scopeType)) {
 				ScopeGenerator.generateScope(logger, context, types, classOrInterface);
 			} else if (classOrInterface.isAssignableTo(types.modelType)) {
-				BeanImplGenerator.generateModelType(logger, context, types, classOrInterface);
+				ModelGenerator.generateModelType(logger, context, types, classOrInterface);
 			} else if (classOrInterface.isAssignableTo(types.arrayOfType)
 					&& classOrInterface.isParameterized() != null) {
 				generateDependentType(logger, context, types ,classOrInterface
