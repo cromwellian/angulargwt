@@ -4,6 +4,7 @@ import java.io.PrintWriter;
 
 import com.google.gwt.angular.client.Util;
 import com.google.gwt.angular.client.impl.JsModelBase;
+import com.google.gwt.core.ext.Generator;
 import com.google.gwt.core.ext.GeneratorContext;
 import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.UnableToCompleteException;
@@ -15,8 +16,10 @@ import elemental.js.json.JsJsonObject;
 import elemental.json.JsonObject;
 import elemental.util.ArrayOfString;
 
-public class ModelGenerator {
-	public static String generateModelFactory(TreeLogger logger,
+public class ModelGenerator extends Generator{
+	private static ModelGenerator instance;
+
+	public String generate(TreeLogger logger,
 			GeneratorContext context, String typeName)
 			throws UnableToCompleteException {
 		AngularGwtTypes types = AngularGwtTypes.getInstanceFor(context);
@@ -80,5 +83,10 @@ public class ModelGenerator {
 	
 		sw.commit(logger);
 		return typeName;
+	}
+
+	public static ModelGenerator get() {
+		if(instance == null) instance = new ModelGenerator();
+		return instance;
 	}
 }

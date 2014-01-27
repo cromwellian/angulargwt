@@ -20,13 +20,13 @@ public class AngularGenerator extends Generator {
 		logger.log(TreeLogger.Type.DEBUG, "Generating " + typeName);
 		
 		if (type.isAssignableTo(types.controllerType)) {
-			return ControllerGenerator.generateController(logger, context, typeName);
+			return ControllerGenerator.get().generate(logger, context, typeName);
 		} else if (type.isAssignableTo(types.scopeType)) {
-			return ScopeGenerator.generateScopeFactory(logger, context, typeName);
+			return ScopeGenerator.get().generate(logger, context, typeName);
 		} else if (type.isAssignableTo(types.modelType)) {
-			return ModelGenerator.generateModelFactory(logger, context, typeName);
+			return ModelGenerator.get().generate(logger, context, typeName);
 		} else if (type.isAssignableTo(types.moduleType)) {
-			return ModuleGenerator.generateModule(logger, context, typeName);
+			return ModuleGenerator.get().generate(logger, context, typeName);
 		}
 		logger.log(TreeLogger.Type.ERROR, "Don't know how to create "
 				+ typeName);

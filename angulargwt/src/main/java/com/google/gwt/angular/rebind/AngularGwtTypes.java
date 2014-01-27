@@ -45,7 +45,7 @@ public class AngularGwtTypes {
 	}
 
 	public static AngularGwtTypes getInstanceFor(GeneratorContext context) {
-		if(instance!=null)
+		if(instance!=null) // && check if same context?
 			return instance;
 		else 
 			return createFor(context);

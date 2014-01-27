@@ -9,6 +9,7 @@ import com.google.common.base.Joiner;
 import com.google.gwt.angular.client.NgInject;
 import com.google.gwt.angular.client.NgWatch;
 import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.core.ext.Generator;
 import com.google.gwt.core.ext.GeneratorContext;
 import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.UnableToCompleteException;
@@ -19,11 +20,21 @@ import com.google.gwt.core.ext.typeinfo.JPrimitiveType;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 
-class ControllerGenerator {
+class ControllerGenerator extends Generator {
 
-	public static String generateController(TreeLogger logger,
-			GeneratorContext context, String typeName)
-					throws UnableToCompleteException {
+	private static ControllerGenerator instance;
+	
+	public static ControllerGenerator get() {
+		if(instance==null) 
+			instance = new ControllerGenerator();
+		return instance;
+	}
+
+	
+		
+		@Override
+		public String generate(TreeLogger logger, GeneratorContext context,
+				String typeName) throws UnableToCompleteException {
 		AngularGwtTypes types = AngularGwtTypes.getInstanceFor(context);
 		JClassType type = context.getTypeOracle().findType(typeName);
 		

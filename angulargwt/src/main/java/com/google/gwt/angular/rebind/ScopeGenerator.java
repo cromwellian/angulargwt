@@ -4,6 +4,7 @@ import java.io.PrintWriter;
 
 import com.google.gwt.angular.client.Util;
 import com.google.gwt.angular.client.impl.JsScopeBase;
+import com.google.gwt.core.ext.Generator;
 import com.google.gwt.core.ext.GeneratorContext;
 import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.UnableToCompleteException;
@@ -15,8 +16,10 @@ import elemental.js.json.JsJsonObject;
 import elemental.json.JsonObject;
 import elemental.util.ArrayOfString;
 
-class ScopeGenerator {	
-	static String generateScopeFactory(TreeLogger logger,
+class ScopeGenerator extends Generator {	
+	private static ScopeGenerator instance;
+
+	public String generate(TreeLogger logger,
 			GeneratorContext context, String typeName)
 			throws UnableToCompleteException {
 		
@@ -80,5 +83,10 @@ class ScopeGenerator {
 
 		sw.commit(logger);
 		return typeName;
+	}
+
+	public static ScopeGenerator get() {
+		if(instance==null) instance = new ScopeGenerator();
+		return instance;
 	}
 }

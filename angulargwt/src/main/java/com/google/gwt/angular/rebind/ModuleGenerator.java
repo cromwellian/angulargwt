@@ -11,15 +11,18 @@ import com.google.gwt.angular.client.NgName;
 import com.google.gwt.angular.client.Util;
 import com.google.gwt.angular.client.impl.AngularModuleBase;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.ext.Generator;
 import com.google.gwt.core.ext.GeneratorContext;
 import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 
-class ModuleGenerator {
+public class ModuleGenerator extends Generator {
 
-	public static String generateModule(TreeLogger logger, GeneratorContext context, String typeName) {
+	private static ModuleGenerator instance;
+
+	public String generate(TreeLogger logger, GeneratorContext context, String typeName) {
 		AngularGwtTypes types = AngularGwtTypes.getInstanceFor(context);
 		JClassType type = context.getTypeOracle().findType(typeName);
 		
@@ -111,6 +114,11 @@ class ModuleGenerator {
 		sw.outdent();
 		sw.commit(logger);
 		return implTypeName;
+	}
+
+	public static ModuleGenerator get() {
+		if(instance==null) instance=new ModuleGenerator();
+		return instance;
 	}
 	
 }
