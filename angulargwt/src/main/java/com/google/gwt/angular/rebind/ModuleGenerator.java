@@ -19,8 +19,10 @@ import com.google.gwt.user.rebind.SourceWriter;
 
 class ModuleGenerator {
 
-	public static String generateModule(TreeLogger logger, GeneratorContext context, AngularGwtTypes types,
-			JClassType type) {
+	public static String generateModule(TreeLogger logger, GeneratorContext context, String typeName) {
+		AngularGwtTypes types = AngularGwtTypes.getInstanceFor(context);
+		JClassType type = context.getTypeOracle().findType(typeName);
+		
 		NgDepends deps = type.getAnnotation(NgDepends.class);
 		String simpleName = type.getName() + AngularConventions.MODULEIMPL;
 		ClassSourceFileComposerFactory fac = new ClassSourceFileComposerFactory(
@@ -32,13 +34,13 @@ class ModuleGenerator {
 		PrintWriter pw = context.tryCreate(logger, type.getPackage().getName(),
 				simpleName);
 		SourceWriter sw = null;
-		String typeName = type.getQualifiedSourceName() + AngularConventions.MODULEIMPL;
+		String implTypeName = type.getQualifiedSourceName() + AngularConventions.MODULEIMPL;
 	
 		if (pw != null) {
 			sw = fac.createSourceWriter(context, pw);
 		}
 		if (sw == null) {
-			return typeName;
+			return implTypeName;
 		}
 		sw.indent();
 		sw.println("public " + simpleName + "() {");
@@ -108,7 +110,7 @@ class ModuleGenerator {
 		sw.println("}");
 		sw.outdent();
 		sw.commit(logger);
-		return typeName;
+		return implTypeName;
 	}
 	
 }

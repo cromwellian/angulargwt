@@ -22,8 +22,11 @@ import com.google.gwt.user.rebind.SourceWriter;
 class ControllerGenerator {
 
 	public static String generateController(TreeLogger logger,
-			GeneratorContext context, String typeName, AngularGwtTypes types, JClassType type)
+			GeneratorContext context, String typeName)
 					throws UnableToCompleteException {
+		AngularGwtTypes types = AngularGwtTypes.getInstanceFor(context);
+		JClassType type = context.getTypeOracle().findType(typeName);
+		
 		ClassSourceFileComposerFactory fac = new ClassSourceFileComposerFactory(
 				type.getPackage().getName(), type.getName() + AngularConventions.IMPL);
 		fac.setSuperclass(typeName);

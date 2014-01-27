@@ -14,18 +14,19 @@ public class AngularGenerator extends Generator {
 	public String generate(TreeLogger logger, GeneratorContext context,
 			String typeName) throws UnableToCompleteException {
 
-		types=AngularGwtTypes.createFor(context);
+		types=AngularGwtTypes.getInstanceFor(context);
 
-		logger.log(TreeLogger.Type.DEBUG, "Generating " + typeName);
 		JClassType type = context.getTypeOracle().findType(typeName);
+		logger.log(TreeLogger.Type.DEBUG, "Generating " + typeName);
+		
 		if (type.isAssignableTo(types.controllerType)) {
-			return ControllerGenerator.generateController(logger, context, typeName, types, type);
+			return ControllerGenerator.generateController(logger, context, typeName);
 		} else if (type.isAssignableTo(types.scopeType)) {
-			return ScopeGenerator.generateScopeFactory(logger, context, types, type);
+			return ScopeGenerator.generateScopeFactory(logger, context, typeName);
 		} else if (type.isAssignableTo(types.modelType)) {
-			return ModelGenerator.generateModelFactory(logger, context, types, type);
+			return ModelGenerator.generateModelFactory(logger, context, typeName);
 		} else if (type.isAssignableTo(types.moduleType)) {
-			return ModuleGenerator.generateModule(logger, context,types, type);
+			return ModuleGenerator.generateModule(logger, context, typeName);
 		}
 		logger.log(TreeLogger.Type.ERROR, "Don't know how to create "
 				+ typeName);

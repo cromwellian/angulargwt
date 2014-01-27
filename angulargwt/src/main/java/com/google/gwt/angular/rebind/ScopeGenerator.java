@@ -17,8 +17,12 @@ import elemental.util.ArrayOfString;
 
 class ScopeGenerator {	
 	static String generateScopeFactory(TreeLogger logger,
-			GeneratorContext context, AngularGwtTypes types ,JClassType type)
+			GeneratorContext context, String typeName)
 			throws UnableToCompleteException {
+		
+		AngularGwtTypes types = AngularGwtTypes.getInstanceFor(context);
+		JClassType type = context.getTypeOracle().findType(typeName);
+		
 		ClassSourceFileComposerFactory fac = new ClassSourceFileComposerFactory(
 				type.getPackage().getName(), type.getName() + AngularConventions.FACTORY);
 		fac.addImplementedInterface(types.factoryType.getQualifiedSourceName());
@@ -27,12 +31,12 @@ class ScopeGenerator {
 		PrintWriter pw = context.tryCreate(logger, type.getPackage().getName(),
 				type.getName() + AngularConventions.FACTORY);
 		SourceWriter sw = null;
-		String typeName = type.getQualifiedSourceName() + AngularConventions.FACTORY;
+		String factoryTypeName = type.getQualifiedSourceName() + AngularConventions.FACTORY;
 		if (pw != null) {
 			sw = fac.createSourceWriter(context, pw);
 		}
 		if (sw == null) {
-			return typeName;
+			return factoryTypeName;
 		}
 
 		sw.indent();
@@ -45,8 +49,8 @@ class ScopeGenerator {
 		sw.println("}-*/;");
 		sw.outdent();
 		sw.commit(logger);
-		logger.log(TreeLogger.Type.DEBUG, "Generated " + typeName);
-		return typeName;
+		logger.log(TreeLogger.Type.DEBUG, "Generated " + factoryTypeName);
+		return factoryTypeName;
 	}
 
 	static String generateScope(TreeLogger logger, GeneratorContext context, AngularGwtTypes types,

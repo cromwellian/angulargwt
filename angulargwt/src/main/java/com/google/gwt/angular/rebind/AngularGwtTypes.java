@@ -44,8 +44,11 @@ public class AngularGwtTypes {
 		return types;
 	}
 
-	public static AngularGwtTypes getInstance() {
-		//TBD raise error if null
-		return instance;
+	public static AngularGwtTypes getInstanceFor(GeneratorContext context) {
+		if(instance!=null)
+			return instance;
+		else 
+			return createFor(context);
+			
 	}
 }
