@@ -20,7 +20,7 @@ public class DirectiveGenerator {
 		for (JMethod method : dType.getMethods()) {
 			NgDirective ngDirective = method.getAnnotation(NgDirective.class);
 
-			// a method annotated as diredctive
+			// a method annotated as directive
 			if (ngDirective != null) {
 				sw.print("module.directive('" + ngDirective.value() + "', "
 						+ "function " + method.getName() + "(");
@@ -100,19 +100,30 @@ public class DirectiveGenerator {
 		sw.println("link: function" + linkArgs + " {");
 		sw.indent();
 		
+		//construct directive
 		sw.println("var directive = @" + dType.getQualifiedSourceName()
 				+ "::new()();");
+		
+		//initialize
 		if (initMethod != null) {
 			sw.println("directive." + initMethod.getJsniSignature() + "("
 					+ paramString + ");");
 		}
+		
+		//call compiled java function
 		sw.println("directive." + method.getJsniSignature() + "("
 				+ Joiner.on("," + "").join(linkPassedParams) + ");");
+		
+		//close link function
 		sw.println("}");
 		sw.outdent();
 		sw.outdent();
+		
+		//close returned object
 		sw.println("};");
 		sw.outdent();
+		
+		//close directive function
 		sw.println("}");
 		
 	}
