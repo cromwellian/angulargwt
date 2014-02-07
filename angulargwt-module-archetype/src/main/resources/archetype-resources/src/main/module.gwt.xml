@@ -3,6 +3,9 @@
 
 	<inherits name="com.google.gwt.angular.angulargwt" />
 	
+	<!-- look for sources at same folder level (src/main/java) -->
+	<source path="" />
+	
 	<!-- SuperDev -->
 	<add-linker name="xsiframe" />
 	<set-configuration-property name='xsiframe.failIfScriptTag' value='FALSE'/>
