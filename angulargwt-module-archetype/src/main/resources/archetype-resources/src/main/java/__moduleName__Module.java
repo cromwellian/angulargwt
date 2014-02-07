@@ -3,6 +3,7 @@
 #set( $symbol_escape = '\' )
 package ${package};
 
+import com.github.h0ru5.gwt.SomeModule.SampleService;
 import com.google.gwt.angular.client.AngularModule;
 import com.google.gwt.angular.client.NgDepends;
 import com.google.gwt.angular.client.NgName;
@@ -13,7 +14,7 @@ import com.google.gwt.angular.client.NgName;
  *
  */
 @NgName("${injectedName}")
-@NgDepends({})
+@NgDepends({SampleService.class})
 public class ${moduleName}Module implements AngularModule {
 
 }
