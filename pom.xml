@@ -166,6 +166,8 @@
 		<module>angulargwt</module>
 		<module>angulargwt-example-todo</module>
 		<module>angulargwt-example-tipcalc</module>
+		
+		<module>angulargwt-module-archetype</module>
 	</modules>
 
 </project>
