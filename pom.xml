@@ -168,6 +168,7 @@
 		<module>angulargwt-example-tipcalc</module>
 		
 		<module>angulargwt-module-archetype</module>
+		<module>angulargwt-app-archetype</module>
 	</modules>
 
 </project>
