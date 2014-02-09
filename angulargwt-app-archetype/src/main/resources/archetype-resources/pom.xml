@@ -1,36 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-  <groupId>\${groupId}</groupId>
-  <artifactId>\${artifactId}</artifactId>
-  <version>\${version}</version>
-  <packaging>war</packaging>
+	<groupId>\${groupId}</groupId>
+	<artifactId>\${artifactId}</artifactId>
+	<version>\${version}</version>
+	<packaging>war</packaging>
 
-  <name>\${artifactId}</name>
+	<name>\${artifactId}</name>
 
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <angulargwt.version>${project.version}</angulargwt.version>
-    <module.fullName>\${package}.\${appName}</module.fullName>
-  </properties>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<angulargwt.version>${project.version}</angulargwt.version>
+		<module.fullName>\${package}.\${appName}</module.fullName>
+	</properties>
 
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.11</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-    	<groupId>com.github.h0ru5.gwt</groupId>
-    	<artifactId>angulargwt</artifactId>
-    	<version>\${angulargwt.version}</version>
-    	<type>gwt-lib</type>
-    </dependency>
-  </dependencies>
-  
-  	<build>
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.gwt.gwtmockito</groupId>
+			<artifactId>gwtmockito</artifactId>
+			<version>1.1.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.github.h0ru5.gwt</groupId>
+			<artifactId>angulargwt</artifactId>
+			<version>\${angulargwt.version}</version>
+			<type>gwt-lib</type>
+		</dependency>
+	</dependencies>
+
+	<build>
 		<plugins>
 			<plugin>
 				<groupId>net.ltgt.gwt.maven</groupId>
@@ -52,7 +59,8 @@
 		</plugins>
 		<pluginManagement>
 			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>
@@ -80,5 +88,5 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-  
+
 </project>

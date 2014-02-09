@@ -3,9 +3,10 @@ package ${package};
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-
+import com.google.gwtmockito.GwtMockitoTestRunner;
 import com.google.gwt.angular.client.AngularModule;
 
+@RunWith(GwtMockitoTestRunner.class)
 public class ${appName}AppTest {
 
 	private ${appName}App fixture;
@@ -18,9 +19,8 @@ public class ${appName}AppTest {
 	@Test
 	public void testMain() throws Exception {
 		// needs GWTMockito as test-time dep
-		//AngularModule[] res = fixture.main();
-		//assertNotNull(res);
-		//assertArrayEquals(new AngularModule[]{${appName}Module.class}, res);
+		AngularModule[] res = fixture.main();
+		assertNotNull(res);
 	}
 
 }
