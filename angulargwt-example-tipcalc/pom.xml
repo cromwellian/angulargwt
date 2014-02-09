@@ -5,7 +5,7 @@
 	<artifactId>angulargwt-example-tipcalc</artifactId>
 
 	<packaging>war</packaging>
-	<name>AngularJS Bridge to GWT - Tip Calc Example</name>
+	<name>AngularGWT - Tip Calc Example</name>
 
 	<url>https://github.com/h0ru5/angulargwt</url>
 
@@ -184,4 +184,5 @@
 		</dependency>
 	</dependencies>
 
+	<description>AngularJS Bridge to GWT - Tip Calc Example</description>
 </project>

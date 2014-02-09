@@ -8,7 +8,7 @@
 	
 	<name>AngularJS Bridge to GWT</name>
 	<url>https://github.com/h0ru5/angulargwt</url>
-	<description>Fork of AngularGWT based on ltgt's maven-plugin</description>
+	<description>Fork of AngularGWT </description>
 	
 	<parent>
 		<groupId>com.github.h0ru5.gwt</groupId>

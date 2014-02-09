@@ -6,7 +6,7 @@
 	<artifactId>angulargwt-module-archetype</artifactId>
 	<packaging>maven-archetype</packaging>
 
-	<name>angulargwt-module-archetype</name>
+	<name>AngularGWT - Archetype for a Module</name>
 
 	<build>
 		<extensions>
@@ -56,5 +56,6 @@
 		<version>1.1.2-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
-	<description>Archetype for an AngularGwt Module</description>
+	<description>Archetype for an AngularGwt Module with example service</description>
+	<url>https://github.com/h0ru5/angulargwt</url>
 </project>

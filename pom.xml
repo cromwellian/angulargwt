@@ -13,7 +13,7 @@
 	<packaging>pom</packaging>
 	<name>AngularGWT Parent</name>
 
-	<description>Parent project for angulargwt and examples</description>
+	<description>Parent project for angulargwt, archetypes and examples</description>
 	<url>https://github.com/h0ru5/angulargwt</url>
 
 	<properties>
