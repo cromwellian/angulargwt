@@ -3,6 +3,7 @@ package ${package};
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import com.google.gwtmockito.GwtMockitoTestRunner;
 import com.google.gwt.angular.client.AngularModule;
 
