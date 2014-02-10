@@ -169,6 +169,7 @@
 		
 		<module>angulargwt-module-archetype</module>
 		<module>angulargwt-app-archetype</module>
+		<module>angtulargwt-jsr303</module>
 	</modules>
 
 </project>
