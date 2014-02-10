@@ -1,4 +1,4 @@
-package com.github.h0ru5.gwt.SomeModule;
+package ${package};
 
 import org.junit.Assert;
 import org.junit.Before;
