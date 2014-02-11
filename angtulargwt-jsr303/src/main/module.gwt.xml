@@ -3,8 +3,14 @@
 
 	<inherits name="com.google.gwt.angular.angulargwt" />
 	
+	<inherits name="org.hibernate.validator.HibernateValidator" />
+    <replace-with
+            class="com.google.gwt.angular.tipcalc.client.Jsr303ValidationFactory">
+        <when-type-is class="javax.validation.ValidatorFactory" />
+    </replace-with>
+    
 	<!-- look for sources at same folder level (src/main/java) -->
-	<source path="" />
+    <source path="" />
 	
 	<!-- SuperDev -->
 	<add-linker name="xsiframe" />

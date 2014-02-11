@@ -9,6 +9,6 @@ import com.google.gwt.angular.client.NgName;
  * Angular Module Declaring our dependencies.
  */
 @NgName("tipcalc")
-@NgDepends({TipCalcController.class, Jsr303Directive.class})
+@NgDepends({TipCalcController.class})
 public class TipCalcAppModule implements AngularModule {
 }

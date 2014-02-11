@@ -4,6 +4,12 @@
     <inherits name="com.google.gwt.angular.angulargwt"/>
     <inherits name="elemental.Elemental"/>
 
+	<inherits name="org.hibernate.validator.HibernateValidator" />
+    <replace-with
+            class="com.google.gwt.angular.tipcalc.client.TipCalcValidationFactory">
+        <when-type-is class="javax.validation.ValidatorFactory" />
+    </replace-with>
+
     <!-- Specify the app entry point class.                         -->
     <entry-point class='com.google.gwt.angular.tipcalc.client.TipCalcApp'/>
     

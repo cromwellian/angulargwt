@@ -48,12 +48,12 @@
             <input id="bill-ppl" placeholder="Number of People"
                    ng-model="tipModel.numPeople"><br>
                    <p ng-show="tipModel.$beanErrors.numPeople">Failed bean Validation:
-            Error: {{tipModel.$beanErrors.billAmount}}</p>
+            Error: {{tipModel.$beanErrors.numPeople}}</p>
             <label>% Tip</label>
             <input id="bill-pct" placeholder="Percentage"
                    ng-model="tipModel.percentage"><br>
                    <p ng-show="tipModel.$beanErrors.percentage">Failed bean Validation:
-            Error: {{tipModel.$beanErrors.billAmount}}</p>
+            Error: {{tipModel.$beanErrors.percentage}}</p>
             <label>Tip Amouunt</label>
             <div>{{tipModel.tip | currency}}</div><br>
             <label>Final Bill</label>
