@@ -6,7 +6,7 @@
 	<artifactId>angulargwt-app-archetype</artifactId>
 	<packaging>maven-archetype</packaging>
 
-	<name>AngularGWT - Archetype for a Module</name>
+	<name>AngularGWT - Archetype for an App</name>
 
 	<build>
 		<extensions>
