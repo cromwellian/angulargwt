@@ -104,6 +104,8 @@
 				</executions>
 				<configuration>
 					<moduleName>${module.fullName}</moduleName>
+					<strict>true</strict>
+<!-- 					<logLevel>DEBUG</logLevel> -->
 				</configuration>
 			</plugin>
 		</plugins>

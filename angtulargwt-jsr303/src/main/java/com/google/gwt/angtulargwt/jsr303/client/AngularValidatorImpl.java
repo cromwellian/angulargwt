@@ -1,4 +1,4 @@
-package com.google.gwt.angtulargwt.jsr303;
+package com.google.gwt.angtulargwt.jsr303.client;
 
 import javax.validation.Validator;
 import com.google.gwt.validation.client.GwtValidation;

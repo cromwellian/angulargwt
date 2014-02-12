@@ -7,8 +7,8 @@ import java.util.List;
 
 import javax.validation.Validator;
 
-import com.google.gwt.angtulargwt.jsr303.NgValidate;
-import com.google.gwt.angtulargwt.jsr303.NgValidator;
+import com.google.gwt.angtulargwt.jsr303.client.NgValidate;
+import com.google.gwt.angtulargwt.jsr303.client.NgValidator;
 import com.google.gwt.angular.client.AngularModule;
 import com.google.gwt.angular.client.Util;
 import com.google.gwt.angular.client.impl.AngularModuleBase;
