@@ -36,6 +36,8 @@
         </executions>
 				<configuration>
 					<moduleName>${gwt.module}</moduleName>
+					<strict>true</strict>
+					<outputGen>true</outputGen>
 				</configuration>
 			</plugin>
 		</plugins>
