@@ -5,7 +5,7 @@
 	
 	<inherits name="org.hibernate.validator.HibernateValidator" />
     <replace-with
-            class="com.google.gwt.angtulargwt.jsr303.Jsr303ValidationFactory">
+            class="com.google.gwt.angtulargwt.jsr303.client.Jsr303ValidationFactory">
         <when-type-is class="javax.validation.ValidatorFactory" />
     </replace-with>
     
