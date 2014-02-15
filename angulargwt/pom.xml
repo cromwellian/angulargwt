@@ -120,6 +120,11 @@
 		<!-- Required by Hibernate validator because slf4j-log4j is optional in 
 			the hibernate-validator POM -->
 
+		<dependency>
+			<groupId>com.googlecode.gwtquery</groupId>
+			<artifactId>gwtquery</artifactId>
+			<version>1.4.0</version>
+		</dependency>
 	</dependencies>
 
 </project>

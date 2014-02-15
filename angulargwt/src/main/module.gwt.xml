@@ -2,7 +2,8 @@
 <module rename-to='angulargwt'>
 
     <inherits name="elemental.Elemental"/>
-
+    <inherits name='com.google.gwt.query.Query'/>
+    
     <generate-with class="com.google.gwt.angular.rebind.AngularGenerator">
         <when-type-assignable class="com.google.gwt.angular.client.Model"/>
     </generate-with>
