@@ -23,19 +23,21 @@ public class ModuleGenerator extends Generator {
 	private static ModuleGenerator instance;
 
 	public String generate(TreeLogger logger, GeneratorContext context, String typeName) {
-		AngularGwtTypes types = AngularGwtTypes.getInstanceFor(context);
 		JClassType type = context.getTypeOracle().findType(typeName);
 		
 		NgDepends deps = type.getAnnotation(NgDepends.class);
 		String simpleName = type.getName() + AngularConventions.MODULEIMPL;
 		ClassSourceFileComposerFactory fac = new ClassSourceFileComposerFactory(
 				type.getPackage().getName(), simpleName);
+		
 		fac.addImport(GWT.class.getName());
 		fac.addImport(Util.class.getName());
 		fac.addImplementedInterface(AngularModule.class.getName());
 		fac.setSuperclass(AngularModuleBase.class.getName());
+		
 		PrintWriter pw = context.tryCreate(logger, type.getPackage().getName(),
 				simpleName);
+		
 		SourceWriter sw = null;
 		String implTypeName = type.getQualifiedSourceName() + AngularConventions.MODULEIMPL;
 	
@@ -46,6 +48,8 @@ public class ModuleGenerator extends Generator {
 			return implTypeName;
 		}
 		sw.indent();
+		
+		// constructor
 		sw.println("public " + simpleName + "() {");
 		sw.indent();
 		// init(GWT.create(dep1), GWT.create(dep2))
@@ -68,6 +72,8 @@ public class ModuleGenerator extends Generator {
 		sw.outdent();
 		sw.println("}");
 		sw.println();
+		
+		// native init
 		sw.println("public native void init(Object... args) /*-{");
 		String modName = type.getSimpleSourceName();
 		NgName ngName = type.getAnnotation(NgName.class);
@@ -105,13 +111,15 @@ public class ModuleGenerator extends Generator {
 			}
 		}
 		sw.println("}-*/;");
-	
+		
+		// getter for module name
 		sw.println("public String moduleName() {");
 		sw.indent();
 		sw.println("return \"" + modName + "\";");
 		sw.outdent();
 		sw.println("}");
 		sw.outdent();
+
 		sw.commit(logger);
 		return implTypeName;
 	}
