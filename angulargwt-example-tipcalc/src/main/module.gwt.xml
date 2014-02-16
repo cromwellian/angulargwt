@@ -5,6 +5,11 @@
     <inherits name="com.google.gwt.angtulargwt.jsr303.Jsr303"/>
 
     <inherits name="elemental.Elemental"/>
+    
+    <replace-with
+            class="com.google.gwt.angular.tipcalc.client.ValidationFactory">
+        <when-type-is class="javax.validation.ValidatorFactory" />
+    </replace-with>
 
     <!-- Specify the app entry point class.                         -->
     <entry-point class='com.google.gwt.angular.tipcalc.client.TipCalcApp'/>

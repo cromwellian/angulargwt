@@ -4,10 +4,11 @@
 	<inherits name="com.google.gwt.angular.angulargwt" />
 	
 	<inherits name="org.hibernate.validator.HibernateValidator" />
-    <replace-with
-            class="com.google.gwt.angtulargwt.jsr303.client.Jsr303ValidationFactory">
-        <when-type-is class="javax.validation.ValidatorFactory" />
-    </replace-with>
+
+<!--     <replace-with -->
+<!--             class="com.google.gwt.angtulargwt.jsr303.client.Jsr303ValidationFactory"> -->
+<!--         <when-type-is class="javax.validation.ValidatorFactory" /> -->
+<!--     </replace-with> -->
     
     <generate-with class="com.google.gwt.angtulargwt.jsr303.rebind.AngularValidatorGenerator">
         <when-type-assignable class="com.google.gwt.angtulargwt.jsr303.client.NgValidator"/>
