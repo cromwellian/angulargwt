@@ -15,37 +15,17 @@ import elemental.js.util.JsArrayOfString;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public abstract class AngularApp implements EntryPoint {
+public abstract class AngularApp extends AngularEntryPoint { 
 
 	private static final String ANGULAR_MIN_JS_URL = "http://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular.min.js";
 
 	/**
-	 * Override this and invoke GWT.create() on your modules.
+	 * This is the entry point method.
 	 */
-	protected abstract AngularModule[] main();
-
-	private final static class ScriptLoader extends PromiseFunction {
-
-		@Override
-		public void f(final Deferred dfd) {
-			ScriptInjector
-			.fromUrl(ANGULAR_MIN_JS_URL)
-			.setCallback(new Callback<Void, Exception>() {
-				@Override
-				public void onFailure(Exception reason) {
-					dfd.reject(reason);
-				}
-
-				@Override
-				public void onSuccess(Void result) {
-					dfd.resolve();
-				}
-			}).setWindow(ScriptInjector.TOP_WINDOW).inject();				
-		}
-
-
+	public final void onModuleLoad() {
+		loadAngular();
+		super.onModuleLoad();
 	}
-
 
 	private void loadAngular() {
 		if(!isInjected()) {
@@ -70,13 +50,6 @@ public abstract class AngularApp implements EntryPoint {
 		}
 	}
 
-	/**
-	 * This is the entry point method.
-	 */
-	public final void onModuleLoad() {
-		loadAngular();
-	}
-
 	private void injectModules() {
 		final JsArrayOfString moduleNames = JsArrayOfString.create();
 		final AngularModule[] modules = main();
@@ -96,5 +69,31 @@ public abstract class AngularApp implements EntryPoint {
 	private native void bootstrap(JsArrayOfString moduleNames)	/*-{
 			$wnd.angular.bootstrap($doc, moduleNames);
 	}-*/;
+
+	/**
+	 * Override this and invoke GWT.create() on your modules.
+	 */
+	
+	private final static class ScriptLoader extends PromiseFunction {
+	
+		@Override
+		public void f(final Deferred dfd) {
+			ScriptInjector
+			.fromUrl(ANGULAR_MIN_JS_URL)
+			.setCallback(new Callback<Void, Exception>() {
+				@Override
+				public void onFailure(Exception reason) {
+					dfd.reject(reason);
+				}
+	
+				@Override
+				public void onSuccess(Void result) {
+					dfd.resolve();
+				}
+			}).setWindow(ScriptInjector.TOP_WINDOW).inject();				
+		}
+	
+	
+	}
 }
 
