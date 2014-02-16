@@ -79,11 +79,6 @@
 	</build>
 
 	<dependencies>
-
-		<!-- Hibernate bean validation source for the GWT client -->
-
-		<!-- Required by Hibernate validator because slf4j-log4j is optional in 
-			the hibernate-validator POM -->
 		<dependency>
 			<groupId>com.github.h0ru5.gwt</groupId>
 			<artifactId>angulargwt</artifactId>
