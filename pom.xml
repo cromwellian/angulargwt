@@ -17,7 +17,7 @@
 	<url>https://github.com/h0ru5/angulargwt</url>
 
 	<properties>
-		<gwtVersion>2.5.1</gwtVersion>
+		<gwtVersion>2.6.0</gwtVersion>
 		<webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -42,7 +42,7 @@
 				<plugin>
 					<groupId>net.ltgt.gwt.maven</groupId>
 					<artifactId>gwt-maven-plugin</artifactId>
-					<version>1.0-alpha-2</version>
+					<version>1.0-alpha-3</version>
 					<extensions>true</extensions>
 				</plugin>
 				<plugin>
