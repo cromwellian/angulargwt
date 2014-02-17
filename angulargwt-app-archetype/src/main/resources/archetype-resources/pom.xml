@@ -54,7 +54,7 @@
 				</executions>
 				<configuration>
 					<moduleName>\${module.fullName}</moduleName>
-<!-- 					<strict>true</strict> -->
+					<strict>true</strict>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -90,4 +90,14 @@
 		</pluginManagement>
 	</build>
 
+	<!-- override managed version in gwtmockito -->
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.google.gwt</groupId>
+				<artifactId>gwt-user</artifactId>
+				<version>2.6.0</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 </project>
