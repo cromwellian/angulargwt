@@ -18,6 +18,11 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>com.github.h0ru5.gwt</groupId>
+			<artifactId>angulargwt</artifactId>
+			<version>\${angulargwt.version}</version>
+			<type>gwt-lib</type>
+		</dependency><dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
@@ -29,12 +34,7 @@
 			<version>1.1.2</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>com.github.h0ru5.gwt</groupId>
-			<artifactId>angulargwt</artifactId>
-			<version>\${angulargwt.version}</version>
-			<type>gwt-lib</type>
-		</dependency>
+		
 	</dependencies>
 
 	<build>
@@ -96,7 +96,7 @@
 			<dependency>
 				<groupId>com.google.gwt</groupId>
 				<artifactId>gwt-user</artifactId>
-				<version>2.6.0</version>
+				<version>${gwtVersion}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
