@@ -23,7 +23,7 @@
 	</properties>
 
 	<scm>
-		<url>git@github.com:h0ru5/angulargwt.git</url>
+		<url>scm:git:git@github.com:h0ru5/angulargwt.git</url>
 		<connection>scm:git:git@github.com:h0ru5/angulargwt.git</connection>
 		<developerConnection>scm:git:git@github.com:h0ru5/angulargwt.git</developerConnection>
 	</scm>
