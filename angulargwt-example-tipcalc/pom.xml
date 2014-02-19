@@ -12,7 +12,7 @@
 	<parent>
 		<groupId>com.github.h0ru5.gwt</groupId>
 		<artifactId>angulargwt-parent</artifactId>
-		<version>1.1.2-SNAPSHOT</version>
+		<version>1.1.2</version>
 		<relativePath>..</relativePath>
 	</parent>
 
@@ -67,7 +67,7 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore></ignore>
+										<ignore />
 									</action>
 								</pluginExecution>
 							</pluginExecutions>
@@ -82,13 +82,13 @@
 		<dependency>
 			<groupId>com.github.h0ru5.gwt</groupId>
 			<artifactId>angulargwt</artifactId>
-			<version>1.1.2-SNAPSHOT</version>
+			<version>1.1.2</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.github.h0ru5.gwt</groupId>
 			<artifactId>angulargwt-jsr303</artifactId>
-			<version>1.1.2-SNAPSHOT</version>
+			<version>1.1.2</version>
 			<type>gwt-lib</type>
 		</dependency>
 	</dependencies>
