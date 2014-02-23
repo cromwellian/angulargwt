@@ -3,6 +3,8 @@
 
 	<inherits name="com.google.gwt.angular.angulargwt" />
 	
+	<entry-point class=${package}.${appName}App'/>
+		
 	<!-- look for sources at same folder level (src/main/java) -->
 	<source path="" />
 	
