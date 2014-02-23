@@ -22,6 +22,9 @@
       <directory>src/main/webapp</directory>
       <includes>
         <include>**/*.xml</include>
+        <include>**/*.html</include>
+        <include>**/*.js</include>
+        <include>**/*.css</include>
       </includes>
     </fileSet>
     <fileSet filtered="true" packaged="true" encoding="UTF-8">
