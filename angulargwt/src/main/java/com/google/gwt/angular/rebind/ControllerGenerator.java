@@ -81,6 +81,7 @@ class ControllerGenerator extends Generator {
 		if (scopeClass != null) {
 			scopeAdapter = ScopeGenerator.generateScope(logger, context, types, scopeClass);
 		}
+		
 		// this override teaches the compiler that TodoScope has been
 		// instantiated so it is not pruned
 		sw.indent();
@@ -88,6 +89,7 @@ class ControllerGenerator extends Generator {
 				+ " jsoScope) { super.setScope" + "(jsoScope); " + "}");
 		sw.outdent();
 	
+		//start of register function
 		sw.indent();
 		sw.println("protected native void register(JavaScriptObject module) /*-{");
 		sw.indent();
@@ -98,12 +100,19 @@ class ControllerGenerator extends Generator {
 		sw.print(Joiner.on(", ").join(params));
 		sw.println(") {");
 		sw.indent();
+		
+		//set the scope
 		sw.println("self.@" + typeName + AngularConventions.IMPL + "::setScope" + "(*)($scope);");
+				
+		//call onInit
 		sw.print("self." + onInitMethod.getJsniSignature() + "(");
 		String controllerParams = Joiner.on(", ").join(params);
 		sw.print(controllerParams);
 		sw.println(");");
-	
+
+		//call initialize
+		sw.println("self.@" + typeName + AngularConventions.IMPL + "::initialize" + "(*)($scope);");
+		
 		for (JMethod action : publicActionMethods(type, onInitMethod)) {
 			String argString = declareArgs(action);
 			sw.println("$scope." + action.getName() + " = $entry(function("
@@ -131,6 +140,9 @@ class ControllerGenerator extends Generator {
 	
 		sw.outdent();
 		sw.println("});");
+		
+
+		
 		// assign controller injections
 		sw.println("ctrlFunc.$inject = [\""
 				+ Joiner.on("\", " + "\"").join(params) + "\"];");

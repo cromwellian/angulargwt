@@ -32,7 +32,7 @@ import java.util.Iterator;
  *
  * @author Ray Cromwell (cromwellian@gmail.com)
  */
-public class AngularController<T extends Scope> {
+public abstract class AngularController<T extends Scope> {
   // convenience variable for accessing scope in published controller methods
   protected T scope;
 
@@ -43,6 +43,8 @@ public class AngularController<T extends Scope> {
     this.scope = scope;
   }
 
+  protected abstract void initialize(T scope);
+  
   protected void register(JavaScriptObject module) {
   }
 
