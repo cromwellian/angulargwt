@@ -13,7 +13,7 @@ import com.google.gwt.angular.client.NgName;
  *
  */
 @NgName("${injectedName}")
-@NgDepends({${appName}Controller.class})
+@NgDepends({${appName}Controller.class,SimpleService.class})
 public class ${appName}Module implements AngularModule {
 
 }

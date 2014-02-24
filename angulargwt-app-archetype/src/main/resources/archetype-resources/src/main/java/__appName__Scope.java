@@ -14,4 +14,7 @@ import com.google.gwt.angular.client.Scope;
 public interface ${appName}Scope extends Scope<${appName}Scope> {
 	String name();
 	${appName}Scope name(String name);
+	
+	String result();
+	${appName}Scope result(String result);
 }
