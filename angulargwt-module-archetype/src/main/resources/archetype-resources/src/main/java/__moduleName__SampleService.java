@@ -2,8 +2,8 @@ package ${package};
 
 import com.google.gwt.angular.client.NgInject;
 
-@NgInject(name="sample")
-public class SampleService {
+@NgInject(name="$moduleName.toLowerCase()service")
+public class ${moduleName}SampleService {
 
 	public String greet(String name) {
 		return "Hello " + name;
