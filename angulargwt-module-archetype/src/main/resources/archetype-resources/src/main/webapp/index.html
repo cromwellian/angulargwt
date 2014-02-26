@@ -24,18 +24,12 @@ Result: {{result}}
 
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular.min.js"></script>
 	<script type="text/javascript" src="${moduleName}/${moduleName}.nocache.js"></script>
+	<script type="text/javascript" src="angulargwt.js"></script>
 	<script type="text/javascript">	
-		angular.element(document).ready(function(){
-			angular.module('myApp',['$moduleName.toLowerCase()']);
-		});
-	
-	
-		window.angularGwtModuleLoaded = function(moduleName) {
-				console.log("finished loading module " + moduleName);
-				
-				//TODO if all modules are loaded				
-				angular.bootstrap(document,['myApp']);
-		}
+		angular.module('myApp',['$moduleName.toLowerCase()']);
+		
+		// This must be called instead of ng-app!
+		angulargwt('myApp');
 	</script>
 </body>
 </html>
