@@ -56,7 +56,7 @@ class ControllerGenerator extends Generator {
 		public static final Function<Injection, String> toName = new Function<ControllerGenerator.Injection, String>() {
 			@Override
 			public String apply(Injection i) {
-				return i.localName;
+				return i.ngName;
 			}
 		};
 	}
