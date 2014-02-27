@@ -13,7 +13,7 @@ import com.google.gwt.angular.client.NgName;
  *
  */
 @NgName("$moduleName.toLowerCase()")
-@NgDepends({${moduleName}SampleService.class, ${moduleName}Controller.class})
+@NgDepends({${moduleName}SampleService.class, ${moduleName}Controller.class, ${moduleName}Directive.class})
 public class ${moduleName}Module implements AngularModule {
 
 }
