@@ -3,6 +3,7 @@ package ${package};
 import com.google.gwt.angular.client.Directive;
 import com.google.gwt.angular.client.NgDirective;
 import com.google.gwt.angular.client.NgElement;
+import com.google.gwt.angular.client.NgInjected;
 import com.google.gwt.angular.client.Scope;
 import com.google.gwt.angular.client.WatchFunction;
 import com.google.gwt.core.client.JavaScriptObject;
@@ -16,10 +17,12 @@ public class ${moduleName}Directive implements Directive {
 
 	private static final String NAME_ATTR = "$moduleName.toLowerCase()Greet";
 	
+	@NgInjected
 	public ${moduleName}SampleService sample;
 
-	public void onLink(${moduleName}SampleService sample) {
-		this.sample = sample;
+	//general initialization
+	public void onLink() {
+
 	}
 	
 	@NgDirective("$moduleName.toLowerCase()Greet")

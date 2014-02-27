@@ -1,12 +1,16 @@
 package com.google.gwt.angular.rebind;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
 import com.google.gwt.angular.client.NgDirective;
 import com.google.gwt.angular.client.NgInject;
+import com.google.gwt.angular.client.NgInjected;
 import com.google.gwt.core.ext.GeneratorContext;
 import com.google.gwt.core.ext.typeinfo.JClassType;
+import com.google.gwt.core.ext.typeinfo.JField;
 import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.core.ext.typeinfo.JParameter;
 import com.google.gwt.user.rebind.SourceWriter;
@@ -31,7 +35,7 @@ public class DirectiveGenerator {
 
 	private static void generateSingleDirective(SourceWriter sw, JClassType dType,	JMethod method) {
 
-		//find initmethod for directive
+		//find initmethod
 		JMethod initMethod = null;
 		for (JMethod m : dType.getMethods()) {
 			if (m == method) {
@@ -45,27 +49,29 @@ public class DirectiveGenerator {
 			}
 		}
 		
-		ArrayList<String> params = new ArrayList<String>();
-		//gather params for initmethod
-		if (initMethod != null) {
-			for (JParameter param : initMethod.getParameters()) {
-				JClassType pType = param.getType().isClassOrInterface();
+		//find injected components
+		List<Injection> injects = new ArrayList<Injection>();
+		for (JField f : dType.getFields()) {
+			if(f.isAnnotationPresent(NgInjected.class)) {
+				JClassType pType = f.getType().isClassOrInterface();
 				if (pType != null) {
 					NgInject pInject = pType.getAnnotation(NgInject.class);
-
+					
 					if (pInject != null) {
-						params.add(pInject.name());
+						injects.add(Injection.create(pType, f.getName(),pInject.name()));
 					}
 				}
 			}
 		}
 
+		List<String> params = Lists.transform(injects,Injection.toName);
+		
 		if(!params.isEmpty()) {
 			sw.print("\'" +
 					Joiner.on("\', " + "\'").join(params)
 					+  "\', ");			
-		}
-		
+		}  
+				
 		sw.print("function " + method.getName() + "(");
 		String paramString = Joiner.on(",").join(params);
 		sw.println(paramString + ") {");
@@ -110,10 +116,14 @@ public class DirectiveGenerator {
 		sw.println("var directive = @" + dType.getQualifiedSourceName()
 				+ "::new()();");
 		
-		//initialize
+		//inject
+		for(Injection inj : injects) {
+			sw.println("directive.%s=%s;", inj.localName,inj.ngName);
+		}
+		
+		//initialize	
 		if (initMethod != null) {
-			sw.println("directive." + initMethod.getJsniSignature() + "("
-					+ paramString + ");");
+			sw.println("directive." + initMethod.getJsniSignature() + "()");
 		}
 		
 		//call compiled java function

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.gwt.angular.client.NgInject;
@@ -33,34 +32,6 @@ class ControllerGenerator extends Generator {
 			instance = new ControllerGenerator();
 		return instance;
 	}
-
-	static final class Injection {
-		public String localName;
-		public String ngName;
-		public JClassType type;
-		
-		public static final Function<Injection, String> toDeclaration = new Function<ControllerGenerator.Injection, String>() {
-			@Override
-			public String apply(Injection i) {
-				return i.type.getQualifiedSourceName() + " " + i.localName;
-			}
-		};
-		
-		public static final Function<Injection, String> toAssignment = new Function<ControllerGenerator.Injection, String>() {
-			@Override
-			public String apply(Injection i) {
-				return String.format("this.%s=%s;",i.localName,i.localName);
-			}
-		};
-		
-		public static final Function<Injection, String> toName = new Function<ControllerGenerator.Injection, String>() {
-			@Override
-			public String apply(Injection i) {
-				return i.ngName;
-			}
-		};
-	}
-
 
 	@Override
 	public String generate(TreeLogger logger, GeneratorContext context,
@@ -122,21 +93,7 @@ class ControllerGenerator extends Generator {
 		//generates a method to pull injections local
 		List<Injection> injects = getInjections(type, types);
 
-		sw.indent();
-		sw.print("protected void onInject(");
-
-		sw.print(Joiner.on(',').join(Lists.transform(injects,Injection.toDeclaration)));
-		
-		sw.println(") {");
-		sw.indent();
-
-		//assignments
-		sw.println(Joiner.on('\n').join(Lists.transform(injects,Injection.toAssignment))); 
-		
-		sw.outdent();		
-
-		sw.println("}");
-		sw.outdent();		
+		Injection.generateOnInject(sw, injects);		
 
 		//start of register function
 		sw.indent();
@@ -212,7 +169,7 @@ class ControllerGenerator extends Generator {
 	}
 
 	private static  List<Injection> getInjections(JClassType ctype, AngularGwtTypes types) {
-		List<Injection> injects = new ArrayList<ControllerGenerator.Injection>();
+		List<Injection> injects = new ArrayList<Injection>();
 		
 		for(JField field:ctype.getFields()) {
 			NgInjected injected = field.getAnnotation(NgInjected.class);
