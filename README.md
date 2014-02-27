@@ -240,7 +240,6 @@ public class MyDirective implements Directive {
 
 ## Supporting the project / to be done
 
- - Maven Archetype to auto-generate starter project.
  - More JavaDoc
  - Unit tests.
  - Transitive dependencies, modules that depend on modules.
