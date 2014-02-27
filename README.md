@@ -15,12 +15,20 @@ Javascript is a very flexible and widespread language, however for mature langua
 
 ## How? (to use)
 
-Best way to start is to take a look at the examples.
-However, a brief getting started here:
-### Setting up a GWT project and add the library
+Best way to start is to take a look at the archetypes.
+
+### Archetypes
+
+There are two archetypes:
+* ```angulargwt-module-archetype``` for a **module** project, where the GWT code is used by a AngularJS app in javascript 
+* ```angulargwt-app-archetype``` for an **app** project, where the top-level-module is written in GWT
+
+As usual ``mvn archetype:generate`` or an IDE such as m2e or NetBeans can be used for the archetypes.
+
+### Other ways to set up AngularGWT projects
 
 #### Maven
-The easiest way to build ibraries or apps is probably using a maven plugin, such as the [codehaus gwt-maven-plugin][3] or the [gwt-maven-plugin from Thomas Broyer][4]
+You can build AngularGWT libraries or apps is using a maven plugin, such as the [codehaus gwt-maven-plugin][3] or the [gwt-maven-plugin from Thomas Broyer][4]
 
 Integrate the following dependency into your pom.xml (adjust version number accordingly). It is on sonatype oss and releases are mirrored into maven central.
 
@@ -28,7 +36,7 @@ Integrate the following dependency into your pom.xml (adjust version number acco
 <dependency>
    <groupId>com.github.h0ru5.gwt</groupId>
    <artifactId>angulargwt</artifactId>
-   <version>1.1.1</version>
+   <version>1.1.3</version>
 </dependency>
 ```
 
@@ -40,7 +48,7 @@ tbd
 #### Ivy/Gradle/...
 tbd
 
-### Inheriting the module
+### Inheriting the GWT module
 This inherits declaration is needed in your &lt;yourmodule&gt;.gwt.xml 
 (note the com.google namespace)
 
@@ -48,8 +56,8 @@ This inherits declaration is needed in your &lt;yourmodule&gt;.gwt.xml
 <inherits name="com.google.gwt.angular.angulargwt" />
 ```
 
-### Implementing a module and/or an application
-Every project you write will provide an **AngularJS Module**. Just extend ``AngularModule`` and provide the module name and the dependencies with the ``@NgName`` and the ``@NgDepends`` annotations. Also put all provided components  (controllers, directives, services etc.) into the ``@NgDepends``.
+### Creating an AngularJS module
+Every project you write will provide at least one **AngularJS Module**. Just extend ``AngularModule`` and provide the module name and the dependencies with the ``@NgName`` and the ``@NgDepends`` annotations. Also put all provided components  (controllers, directives, services etc.) into the ``@NgDepends``.
 
 For example:
 
@@ -60,7 +68,19 @@ public class MyModule implements AngularModule {
 }
 ```
 
-If you write not only a library but an **application**, you also need to provide a entry-point class. Just extend ``AngularApp`` to do so. You to override the abstract method ``main()``, which should return all referenced modules as an array.
+### Choosing a module or an application as project type
+
+There are three ways a project is used:
+
+1. As Java library in another AngularGWT project
+2. As javascript containing AngularGWT modules used by an AngularJS app
+3. As javascript containing AngularGWT modules incl. the top-module
+
+For compillation to javascript, a GWT  entry point is needed. 
+
+#### App project
+
+If you write not only a library module but an **application** (use case 3), you need to provide a entry-point class by extending ``AngularApp``. You need to override the abstract method ``main()``, which should return all referenced AngularGWT modules as an array.
 
 ```java
 public class MyApp extends AngularApp {
@@ -71,7 +91,38 @@ public class MyApp extends AngularApp {
 }
 ```
 
-The template(s) are then provided in the same way as usual for AngularJS and need to include the GWT-generated script. You do not need to include angularjs from the cloud, it will be lazy-loaded if it is not found.
+The template(s) are then provided in the same way as usual for AngularJS and need to include the GWT-generated script. You do not need to include angularjs in the head, it will be lazy-loaded from the CDN if it is not detected.
+
+#### A library of AngularGWT modules
+
+For all other projects (use cases 1 or 2), you write a **module** and extend an entry-point in the same way from ``AngularEntryPoint``
+
+```java
+public class MyLib extends AngularEntryPoint {
+   @Override
+   protected AngularModule[] main() {
+     return new AngularModule[] {(AngularModule) GWT.create(MyModule.class)};
+   }
+}
+```
+
+If you use this lib in Java (use case 1), you just add the classes vand sources to the classpath (or let Maven do it).
+
+If you use the compiled library as javascript in a regular AngularJS app (use case 2) then you have to delay the bootstrapping until the async loading of GWT has finished, this is done via a callback called ``angularGwtModuleLoaded``.
+
+The script ``angulargwt.js`` provides a very basic handler for this purpose.
+
+So your AngularJS-app **must not** use ``<body ng-app="MyApp">``, but instead include this:
+
+```html
+<script type="text/javascript" src="angulargwt.js"></script>
+<script type="text/javascript">	
+		// This must be called instead of ng-app!
+		angulargwt('myApp');
+</script>
+```
+
+Refer to [bootstrap process documentation](http://docs.angularjs.org/guide/bootstrap) of AngularJS for background.
 
 ### Implementing the different types of AngularJS components
 
