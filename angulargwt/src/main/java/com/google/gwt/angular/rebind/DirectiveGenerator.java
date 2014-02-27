@@ -22,17 +22,16 @@ public class DirectiveGenerator {
 
 			// a method annotated as directive
 			if (ngDirective != null) {
-				sw.print("module.directive('" + ngDirective.value() + "', "
-						+ "function " + method.getName() + "(");
+				sw.print("module.directive('" + ngDirective.value() + "',[ ");
 				generateSingleDirective(sw, dType, method);
-				sw.println(");");
+				sw.println("]);");
 			}
 		}
 	}
 
 	private static void generateSingleDirective(SourceWriter sw, JClassType dType,	JMethod method) {
 
-		//find initmethod for class
+		//find initmethod for directive
 		JMethod initMethod = null;
 		for (JMethod m : dType.getMethods()) {
 			if (m == method) {
@@ -61,6 +60,13 @@ public class DirectiveGenerator {
 			}
 		}
 
+		if(!params.isEmpty()) {
+			sw.print("\'" +
+					Joiner.on("\', " + "\'").join(params)
+					+  "\', ");			
+		}
+		
+		sw.print("function " + method.getName() + "(");
 		String paramString = Joiner.on(",").join(params);
 		sw.println(paramString + ") {");
 		sw.indent();
