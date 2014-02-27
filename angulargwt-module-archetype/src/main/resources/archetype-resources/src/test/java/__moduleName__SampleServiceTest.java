@@ -4,13 +4,13 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class SampleServiceTest {
+public class ${moduleName}SampleServiceTest {
 
-	private SampleService fixture;
+	private ${moduleName}SampleService fixture;
 
 	@Before
 	public void setUp() throws Exception {
-		fixture = new SampleService();
+		fixture = new  ${moduleName}SampleService();
 	}
 
 	@Test

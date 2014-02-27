@@ -11,10 +11,10 @@ import com.google.gwt.angular.client.Scope;
  * Declare further properties as bean-patterns
  * 
  */
-public interface ${appName}Scope extends Scope<${appName}Scope> {
+public interface ${moduleName}Scope extends Scope<${moduleName}Scope> {
 	String name();
-	${appName}Scope name(String name);
+	${moduleName}Scope name(String name);
 	
 	String result();
-	${appName}Scope result(String result);
+	${moduleName}Scope result(String result);
 }

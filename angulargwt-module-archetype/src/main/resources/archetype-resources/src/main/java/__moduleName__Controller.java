@@ -16,17 +16,17 @@ import elemental.client.Browser;
  * All public methods are exposed to the view
  * React to the view by watching the viewmodel
  */
-@NgInject(name="${appName}Controller")
-public class ${appName}Controller extends AngularController<${appName}Scope> {
+@NgInject(name="${moduleName}Controller")
+public class ${moduleName}Controller extends AngularController<${moduleName}Scope> {
 	
 	/** injected service, field must be public */
 	@NgInjected
-	public SimpleService simple;
+	public  ${moduleName}SampleService sample;
 	
 	/** initialization of scope variables */
 	@Override
-	protected void initialize(${appName}Scope scope) {
-		scope.name("World").result(simple.greet("World"));
+	protected void initialize(${moduleName}Scope scope) {
+		scope.name("World").result(sample.greet("World"));
 	}
 	
 	/** exposed functions*/
@@ -46,6 +46,6 @@ public class ${appName}Controller extends AngularController<${appName}Scope> {
 	@NgWatch("name")
 	public void watchName(String newName){
 		Browser.getWindow().getConsole().log("Name changed to " + newName);
-		scope.result(simple.greet(newName));
+		scope.result(sample.greet(newName));
 	}
 }

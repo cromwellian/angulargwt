@@ -5,7 +5,7 @@
   <groupId>\${groupId}</groupId>
   <artifactId>\${artifactId}</artifactId>
   <version>\${version}</version>
-  <packaging>jar</packaging>
+  <packaging>gwt-lib</packaging>
 
   <name>\${artifactId}</name>
 
@@ -47,6 +47,8 @@
 				</executions>
 				<configuration>
 					<moduleName>\${module.fullName}</moduleName>
+					<strict>true</strict>
+					<outputGen>true</outputGen>
 				</configuration>
 			</plugin>
 		</plugins>

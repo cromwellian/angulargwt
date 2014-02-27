@@ -12,8 +12,8 @@ import com.google.gwt.angular.client.NgName;
  * add all exposed Components (Services and Directives) to the Depends-Annotation
  *
  */
-@NgName("${injectedName}")
-@NgDepends({SampleService.class})
+@NgName("$moduleName.toLowerCase()")
+@NgDepends({${moduleName}SampleService.class, ${moduleName}Controller.class})
 public class ${moduleName}Module implements AngularModule {
 
 }

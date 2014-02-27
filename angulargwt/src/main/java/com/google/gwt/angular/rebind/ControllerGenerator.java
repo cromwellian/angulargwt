@@ -5,8 +5,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.google.common.base.Function;
 import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
 import com.google.gwt.angular.client.NgInject;
+import com.google.gwt.angular.client.NgInjected;
 import com.google.gwt.angular.client.NgWatch;
 import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.core.ext.Generator;
@@ -14,6 +17,7 @@ import com.google.gwt.core.ext.GeneratorContext;
 import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JClassType;
+import com.google.gwt.core.ext.typeinfo.JField;
 import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.core.ext.typeinfo.JParameter;
 import com.google.gwt.core.ext.typeinfo.JPrimitiveType;
@@ -23,21 +27,47 @@ import com.google.gwt.user.rebind.SourceWriter;
 class ControllerGenerator extends Generator {
 
 	private static ControllerGenerator instance;
-	
+
 	public static ControllerGenerator get() {
 		if(instance==null) 
 			instance = new ControllerGenerator();
 		return instance;
 	}
 
-	
+	static final class Injection {
+		public String localName;
+		public String ngName;
+		public JClassType type;
 		
-		@Override
-		public String generate(TreeLogger logger, GeneratorContext context,
-				String typeName) throws UnableToCompleteException {
+		public static final Function<Injection, String> toDeclaration = new Function<ControllerGenerator.Injection, String>() {
+			@Override
+			public String apply(Injection i) {
+				return i.type.getQualifiedSourceName() + " " + i.localName;
+			}
+		};
+		
+		public static final Function<Injection, String> toAssignment = new Function<ControllerGenerator.Injection, String>() {
+			@Override
+			public String apply(Injection i) {
+				return String.format("this.%s=%s;",i.localName,i.localName);
+			}
+		};
+		
+		public static final Function<Injection, String> toName = new Function<ControllerGenerator.Injection, String>() {
+			@Override
+			public String apply(Injection i) {
+				return i.ngName;
+			}
+		};
+	}
+
+
+	@Override
+	public String generate(TreeLogger logger, GeneratorContext context,
+			String typeName) throws UnableToCompleteException {
 		AngularGwtTypes types = AngularGwtTypes.getInstanceFor(context);
 		JClassType type = context.getTypeOracle().findType(typeName);
-		
+
 		ClassSourceFileComposerFactory fac = new ClassSourceFileComposerFactory(
 				type.getPackage().getName(), type.getName() + AngularConventions.IMPL);
 		fac.setSuperclass(typeName);
@@ -74,37 +104,75 @@ class ControllerGenerator extends Generator {
 		 * .client.todomvc.TodoController::doSomething()(); }); });
 		 * $wnd.TodoController.$inject = ['$scope', '$element'];
 		 */
-		JMethod onInitMethod = findInitMethod(type, logger);
-		JClassType scopeClass = findScopeClass(onInitMethod,types);
-	
+//		JMethod onInitMethod = findInitMethod(type, logger);
+		JClassType scopeClass = findScopeClass(type,types);
+
 		String scopeAdapter = null;
 		if (scopeClass != null) {
 			scopeAdapter = ScopeGenerator.generateScope(logger, context, types, scopeClass);
 		}
+
 		// this override teaches the compiler that TodoScope has been
 		// instantiated so it is not pruned
 		sw.indent();
 		sw.println("protected void setScope(" + scopeAdapter
 				+ " jsoScope) { super.setScope" + "(jsoScope); " + "}");
 		sw.outdent();
-	
+
+		//generates a method to pull injections local
+		List<Injection> injects = getInjections(type, types);
+
+		sw.indent();
+		sw.print("protected void onInject(");
+
+		sw.print(Joiner.on(',').join(Lists.transform(injects,Injection.toDeclaration)));
+		
+		sw.println(") {");
+		sw.indent();
+
+		//assignments
+		sw.println(Joiner.on('\n').join(Lists.transform(injects,Injection.toAssignment))); 
+		
+		sw.outdent();		
+
+		sw.println("}");
+		sw.outdent();		
+
+		//start of register function
 		sw.indent();
 		sw.println("protected native void register(JavaScriptObject module) /*-{");
 		sw.indent();
 		sw.println("var self = this;");
+	
+		List<String> injList = Lists.transform(injects,Injection.toName);
+		List<String> params = Lists.newArrayList("$scope");
+		params.addAll(injList);
+
+		//print controller function
 		sw.print("var ctrlFunc =  $entry(function(");
-		List<String> params = declareControllerParams(onInitMethod
-				.getParameters(),types);
 		sw.print(Joiner.on(", ").join(params));
 		sw.println(") {");
 		sw.indent();
+
+		//set the scope
 		sw.println("self.@" + typeName + AngularConventions.IMPL + "::setScope" + "(*)($scope);");
-		sw.print("self." + onInitMethod.getJsniSignature() + "(");
-		String controllerParams = Joiner.on(", ").join(params);
-		sw.print(controllerParams);
+
+		//assign injections
+		sw.print("self.@" + typeName + AngularConventions.IMPL + "::onInject" + "(*)(");
+		sw.print(Joiner.on(',').join(injList));
 		sw.println(");");
-	
-		for (JMethod action : publicActionMethods(type, onInitMethod)) {
+
+		
+		//call onInit
+//		sw.print("self." + onInitMethod.getJsniSignature() + "(");
+//		String controllerParams = Joiner.on(", ").join(params);
+//		sw.print(controllerParams);
+//		sw.println(");");
+
+		//call initialize
+		sw.println("self.@" + typeName + AngularConventions.IMPL + "::initialize" + "(*)($scope);");
+
+		for (JMethod action : publicActionMethods(type)) {
 			String argString = declareArgs(action);
 			sw.println("$scope." + action.getName() + " = $entry(function("
 					+ argString + ") {");
@@ -115,7 +183,7 @@ class ControllerGenerator extends Generator {
 			sw.outdent();
 			sw.println("});");
 		}
-	
+
 		for (JMethod action : watchMethods(type)) {
 			NgWatch watchParams = action.getAnnotation(NgWatch.class);
 			String argString = declareArgs(action);
@@ -128,19 +196,72 @@ class ControllerGenerator extends Generator {
 			sw.outdent();
 			sw.println("}), " + watchParams.objEq() + ");");
 		}
-	
+
 		sw.outdent();
 		sw.println("});");
+
 		// assign controller injections
 		sw.println("ctrlFunc.$inject = [\""
 				+ Joiner.on("\", " + "\"").join(params) + "\"];");
 		sw.println("module.controller('" + controllerName + "', ctrlFunc);");
 		sw.outdent();
 		sw.println("}-*/;");
-	
+
 		sw.commit(logger);
 		return typeName + AngularConventions.IMPL;
 	}
+
+	private static  List<Injection> getInjections(JClassType ctype, AngularGwtTypes types) {
+		List<Injection> injects = new ArrayList<ControllerGenerator.Injection>();
+		
+		for(JField field:ctype.getFields()) {
+			NgInjected injected = field.getAnnotation(NgInjected.class);
+			if(injected!=null) {
+				JClassType type = field.getType().isClassOrInterface();
+				Injection in = new Injection();
+				in.type = type;
+				in.localName = field.getName();
+				
+				if (isScope(type,types)) {
+					in.ngName = "$scope";
+				} else if (isElement(type,types)) {
+					in.ngName = "$element";
+				} else {
+					NgInject ngInject = type.getAnnotation(NgInject.class);
+					if (ngInject != null) {
+						in.ngName = ngInject.name();
+					} else {
+						//Placeholder class or interface
+					}
+				}
+				injects.add(in);
+			}
+			
+		}
+		return injects;
+	}
+
+
+
+	private static List<String> declareControllerParams(JParameter[] parameters,AngularGwtTypes types) {
+		List<String> params = new ArrayList<String>();
+		for (JParameter param : parameters) {
+			JClassType type = param.getType().isClassOrInterface();
+			if (isScope(type,types)) {
+				params.add("$scope");
+			} else if (isElement(type,types)) {
+				params.add("$element");
+			} else {
+				NgInject ngInject = type.getAnnotation(NgInject.class);
+				if (ngInject != null) {
+					params.add(ngInject.name());
+				}
+			}
+		}
+		return params;
+	}
+
+
 
 	private static boolean  isElement(JClassType ctype, AngularGwtTypes types) {
 		return ctype != null
@@ -167,13 +288,9 @@ class ControllerGenerator extends Generator {
 		return method.getReturnType() == JPrimitiveType.VOID;
 	}
 
-	private static Collection<JMethod> publicActionMethods(JClassType type,
-			JMethod onInitMethod) {
+	private static Collection<JMethod> publicActionMethods(JClassType type) {
 		Collection<JMethod> methods = new ArrayList<JMethod>();
 		for (JMethod method : type.getMethods()) {
-			if (method == onInitMethod) {
-				continue;
-			}
 			if (method.getAnnotation(NgWatch.class) != null) {
 				continue;
 			}
@@ -187,20 +304,19 @@ class ControllerGenerator extends Generator {
 	private static Collection<JMethod> watchMethods(JClassType type) {
 		Collection<JMethod> methods = new ArrayList<JMethod>();
 		for (JMethod method : type.getMethods()) {
-	
+
 			if (method.getAnnotation(NgWatch.class) == null) {
 				continue;
 			}
-	
+
 			methods.add(method);
-	
+
 		}
 		return methods;
 	}
 
-	private static JClassType findScopeClass(JMethod onInitMethod,AngularGwtTypes types) {
-		for (JParameter param : onInitMethod.getParameters()) {
-			JClassType cType = param.getType().isClassOrInterface();
+	private static JClassType findScopeClass(JClassType type,AngularGwtTypes types) {
+		for (JClassType cType : type.getSuperclass().isParameterized().getTypeArgs()) {
 			if (isScope(cType, types)) {
 				return cType;
 			}
@@ -225,22 +341,4 @@ class ControllerGenerator extends Generator {
 		return onInit;
 	}
 
-	private static List<String> declareControllerParams(JParameter[] parameters,AngularGwtTypes types) {
-		List<String> params = new ArrayList<String>();
-		for (JParameter param : parameters) {
-			JClassType type = param.getType().isClassOrInterface();
-			if (isScope(type,types)) {
-				params.add("$scope");
-			} else if (isElement(type,types)) {
-				params.add("$element");
-			} else {
-				NgInject ngInject = type.getAnnotation(NgInject.class);
-				if (ngInject != null) {
-					params.add(ngInject.name());
-				}
-			}
-		}
-		return params;
-	}
-	
 }
