@@ -11,9 +11,6 @@ import com.google.gwt.core.client.GWT;
  */
 @NgInject(name = "TipCtrl")
 public class TipCalcController extends AngularController<TipCalcScope> {
-	public void onInit(TipCalcScope scope) {
-
-	}
 
 	@NgWatch(value = "tipModel", objEq = true)
 	public void $watchTipModel(TipModel tipModel) {

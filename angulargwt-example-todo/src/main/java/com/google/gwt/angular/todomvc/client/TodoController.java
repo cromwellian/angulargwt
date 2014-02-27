@@ -5,6 +5,7 @@ import static com.google.gwt.angular.client.Util.make;
 import com.google.gwt.angular.client.AngularController;
 import com.google.gwt.angular.client.Location;
 import com.google.gwt.angular.client.NgInject;
+import com.google.gwt.angular.client.NgInjected;
 import com.google.gwt.angular.client.NgWatch;
 import com.google.gwt.core.client.GWT;
 
@@ -14,15 +15,10 @@ import elemental.util.ArrayOf;
 public class TodoController extends AngularController<TodoScope> {
 
 	private ArrayOf<Todo> todos;
-	private Location location;
-	private TodoStorage store;
-	private TodoFilter filterFilter;
-
-	public void onInit(TodoScope scope, Location location, TodoStorage store, TodoFilter filter) {
-		this.location = location;
-		this.store = store;
-		this.filterFilter = filter;
-	}
+	
+	@NgInjected	public Location location;
+	@NgInjected	public TodoStorage store;
+	@NgInjected	public TodoFilter filterFilter;
 
 	@Override
 	protected void initialize(TodoScope scope) {
