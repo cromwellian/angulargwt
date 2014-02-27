@@ -165,7 +165,9 @@ public interface MyScope extends Scope<MyScope> {
 
 Controllers extend the class ``ÀngularController<>`` and refer to their scope as type argument. The name to be used in the template is specified via ```@NgInject(name="ControllerName")```.
 
-Each controller must implement the function ``onInit(Scope scope,...)``, in which it specifies the components to be injected.
+Each controller must implement the abstract function ``initialize(Scope scope)``, in which it initializes the scope.
+
+To specify a component to be injected, it must be declared as a public field and annotated with ``@NgInjected``
 
 Watches are defined by annotating a Method with the ``@Watch`` annotation. The first parameter is the expression to be watched, the second parameter is a boolean that enforces deep object equality. The Method will be called when the watch expression changes with new and old value as parameters.
 Refer to [Angular's documentation on $watch][7] for background information.
@@ -173,7 +175,12 @@ Refer to [Angular's documentation on $watch][7] for background information.
 ```java
 @NgInject(name = "MyCtrl")
 public class MyController extends AngularController<MyScope> {
-    public void onInit(MyScope scope, MyService service, Location Location, MyFilter filter) {...}
+    
+    @NgInjected
+    public MyService service;
+    
+    @Override
+    public void initialize(MyScope scope) {...}
 
     @NgWatch(value = "persons", objEq = true)
     public void $watchPersons() {...}
@@ -181,8 +188,9 @@ public class MyController extends AngularController<MyScope> {
     @NgWatch("location.path()")
     public void $watchPath(String path) {...}
     
-    //arbitrary functions to be called via template
+    //arbitrary functions to be called from the template
     public void clearPersons() {...}
+}
 ```
 
 #### Filter
