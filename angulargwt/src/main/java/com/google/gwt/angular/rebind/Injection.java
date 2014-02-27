@@ -1,11 +1,15 @@
 package com.google.gwt.angular.rebind;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
+import com.google.gwt.angular.client.NgInject;
+import com.google.gwt.angular.client.NgInjected;
 import com.google.gwt.core.ext.typeinfo.JClassType;
+import com.google.gwt.core.ext.typeinfo.JField;
 import com.google.gwt.user.rebind.SourceWriter;
 
 public final class Injection {
@@ -59,5 +63,22 @@ public final class Injection {
 		sw.println("}");
 		
 		sw.outdent();	
+	}
+	
+	public static List<Injection> getInjectedFields(JClassType dType) {
+		List<Injection> injects = new ArrayList<Injection>();
+		for (JField f : dType.getFields()) {
+			if(f.isAnnotationPresent(NgInjected.class)) {
+				JClassType pType = f.getType().isClassOrInterface();
+				if (pType != null) {
+					NgInject pInject = pType.getAnnotation(NgInject.class);
+					
+					if (pInject != null) {
+						injects.add(Injection.create(pType, f.getName(),pInject.name()));
+					}
+				}
+			}
+		}
+		return injects;
 	}
 }

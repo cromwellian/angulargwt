@@ -1,6 +1,7 @@
 package com.google.gwt.angular.todomvc.client;
 
 import com.google.gwt.angular.client.*;
+
 import elemental.json.JsonObject;
 import elemental.json.JsonValue;
 import elemental.util.ArrayOf;
@@ -8,30 +9,33 @@ import elemental.util.ArrayOf;
 /**
  * TodoMVC todo-focus directive.
  */
+@NgDirective("todoFocus")
 public class TodoFocusDirective implements Directive {
-  private NgTimeout timeout;
+	@NgInjected
+	public NgTimeout timeout;
 
-  /**
-   * Called to supply dependency injection for todo-focus.
-   */
+	public void focus(TodoScope scope, final ArrayOf<NgElement> element, JsonObject attrs) {
+		scope.$watch(attrs.getString("todoFocus"), new WatchFunction<JsonValue>() {
+			public void exec(JsonValue value) {
+				if (!value.asBoolean()) {
+					timeout.schedule(new Runnable() {
 
-  public void onFocus(NgTimeout timeout) {
-    this.timeout = timeout;
-  }
+						public void run() {
+							element.get(0).focus();
+						}
+					}, 0, false);
+				}
+			}
+		});
+	}
 
-  @NgDirective("todoFocus")
-  public void focus(TodoScope scope, final ArrayOf<NgElement> element, JsonObject attrs) {
-    scope.$watch(attrs.getString("todoFocus"), new WatchFunction<JsonValue>() {
-      public void exec(JsonValue value) {
-        if (!value.asBoolean()) {
-          timeout.schedule(new Runnable() {
+	@Override
+	public void link(Scope scope, ArrayOf<NgElement> element, JsonObject attrs) {
+		focus((TodoScope) scope, element, attrs);
+	}
 
-            public void run() {
-              element.get(0).focus();
-            }
-          }, 0, false);
-        }
-      }
-    });
-  }
+	@Override
+	public void init() {
+
+	}
 }

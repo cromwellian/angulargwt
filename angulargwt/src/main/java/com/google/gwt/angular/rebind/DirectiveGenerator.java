@@ -6,63 +6,35 @@ import java.util.List;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.gwt.angular.client.NgDirective;
-import com.google.gwt.angular.client.NgInject;
-import com.google.gwt.angular.client.NgInjected;
 import com.google.gwt.core.ext.GeneratorContext;
 import com.google.gwt.core.ext.typeinfo.JClassType;
-import com.google.gwt.core.ext.typeinfo.JField;
 import com.google.gwt.core.ext.typeinfo.JMethod;
-import com.google.gwt.core.ext.typeinfo.JParameter;
+import com.google.gwt.core.ext.typeinfo.JType;
 import com.google.gwt.user.rebind.SourceWriter;
 
 public class DirectiveGenerator {
+
 	public static void generateDirectives(GeneratorContext context, SourceWriter sw,
 			Class<?> clazz) {
-		// class containing directives
+		// class of a directive
 		JClassType dType = context.getTypeOracle().findType(clazz.getName());
-
-		for (JMethod method : dType.getMethods()) {
-			NgDirective ngDirective = method.getAnnotation(NgDirective.class);
-
+		NgDirective ngDirective = dType.getAnnotation(NgDirective.class);
+		
 			// a method annotated as directive
-			if (ngDirective != null) {
+			if (ngDirective != null ) {
 				sw.print("module.directive('" + ngDirective.value() + "',[ ");
-				generateSingleDirective(sw, dType, method);
+				generateSingleDirective(sw, dType);
 				sw.println("]);");
 			}
-		}
 	}
 
-	private static void generateSingleDirective(SourceWriter sw, JClassType dType,	JMethod method) {
+	private static void generateSingleDirective(SourceWriter sw, JClassType dType) {
 
 		//find initmethod
-		JMethod initMethod = null;
-		for (JMethod m : dType.getMethods()) {
-			if (m == method) {
-				continue;
-			}
-			if (m.getName().equals(
-					"on" + Character.toUpperCase(method.getName().charAt(0))
-							+ method.getName().substring(1))) {
-				initMethod = m;
-				break;
-			}
-		}
+		JMethod initMethod = dType.findMethod("init", new JType[0]);
 		
 		//find injected components
-		List<Injection> injects = new ArrayList<Injection>();
-		for (JField f : dType.getFields()) {
-			if(f.isAnnotationPresent(NgInjected.class)) {
-				JClassType pType = f.getType().isClassOrInterface();
-				if (pType != null) {
-					NgInject pInject = pType.getAnnotation(NgInject.class);
-					
-					if (pInject != null) {
-						injects.add(Injection.create(pType, f.getName(),pInject.name()));
-					}
-				}
-			}
-		}
+		List<Injection> injects = Injection.getInjectedFields(dType);
 
 		List<String> params = Lists.transform(injects,Injection.toName);
 		
@@ -72,7 +44,7 @@ public class DirectiveGenerator {
 					+  "\', ");			
 		}  
 				
-		sw.print("function " + method.getName() + "(");
+		sw.print("function (");
 		String paramString = Joiner.on(",").join(params);
 		sw.println(paramString + ") {");
 		sw.indent();
@@ -84,27 +56,14 @@ public class DirectiveGenerator {
 		linkPassedParams.add("element");
 		linkPassedParams.add("attrs");
 		
-		ArrayList<String> requires = new ArrayList<String>();
-		int requireCount = 0;
+		List<String> requires = getRequires(dType);
 		
-		for (JParameter p : method.getParameters()) {
-			JClassType lpType = p.getType().isClassOrInterface();
-			if (lpType != null) {
-				NgInject requiresInject = lpType.getAnnotation(NgInject.class);
-				if (requiresInject != null) {
-					if ("$scope".equals(requiresInject.name())
-							|| "$element".equals(requiresInject.name())) {
-						continue;
-					}
-					linkPassedParams.add("requires[" + requireCount + "]");
-					requireCount++;
-					requires.add(requiresInject.name());
-				}
-			}
-		}
-		
+		for(int requireCount = 0;requireCount < requires.size();requireCount++)
+			linkPassedParams.add("requires[" + requireCount + "]");
+
 		String linkArgs = "(scope,element,attrs"
-				+ (requireCount > 0 ? ", " + "requires" : "") + ")";
+				+ (!requires.isEmpty() ? ", " + "requires" : "") + ")";
+
 		if (!requires.isEmpty()) {
 			sw.println("require: ['" + Joiner.on("', '").join(requires) + "'],");
 		}
@@ -126,9 +85,10 @@ public class DirectiveGenerator {
 			sw.println("directive." + initMethod.getJsniSignature() + "()");
 		}
 		
-		//call compiled java function
-		sw.println("directive." + method.getJsniSignature() + "("
-				+ Joiner.on("," + "").join(linkPassedParams) + ");");
+		//call the compiled link function
+		sw.println("directive.@" + dType.getQualifiedSourceName() + 
+		"::link(Lcom/google/gwt/angular/client/Scope;Lelemental/util/ArrayOf;Lelemental/json/JsonObject;)(scope,element,attrs)");
+		
 		
 		//close link function
 		sw.println("}");
@@ -142,6 +102,28 @@ public class DirectiveGenerator {
 		//close directive function
 		sw.println("}");
 		
+	}
+
+	public static List<String> getRequires(JClassType dType) {
+		List<String> requires = new ArrayList<String>();
+		return requires;
+		//Dead code: inter-directive communication with require and controllers
+		
+//		for (JField rt : dType.getFields()) {
+//			JClassType lpType = rt.getType().isClassOrInterface();
+//			if (lpType != null) {
+//				NgInject requiresInject = lpType.getAnnotation(NgInject.class);
+//				if (requiresInject != null) {
+//					if ("$scope".equals(requiresInject.name())
+//							|| "$element".equals(requiresInject.name())) {
+//						continue;
+//					}
+//					
+//					requires.add(requiresInject.name());
+//				}
+//			}
+//		}
+//		return requires;
 	}
 
 }

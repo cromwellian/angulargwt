@@ -13,6 +13,7 @@ import elemental.dom.Node;
 import elemental.json.JsonObject;
 import elemental.util.ArrayOf;
 
+@NgDirective("$moduleName.toLowerCase()Greet")
 public class ${moduleName}Directive implements Directive {
 
 	private static final String NAME_ATTR = "$moduleName.toLowerCase()Greet";
@@ -21,11 +22,12 @@ public class ${moduleName}Directive implements Directive {
 	public ${moduleName}SampleService sample;
 
 	//general initialization
-	public void onLink() {
+	@Override
+	public void init() {
 
 	}
 	
-	@NgDirective("$moduleName.toLowerCase()Greet")
+	@Override
 	public void link(final Scope scope, final ArrayOf<NgElement> element,
 			final JsonObject attrs) {
 
