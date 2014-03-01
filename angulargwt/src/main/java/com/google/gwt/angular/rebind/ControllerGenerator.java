@@ -119,13 +119,6 @@ class ControllerGenerator extends Generator {
 		sw.print(Joiner.on(',').join(injList));
 		sw.println(");");
 
-		
-		//call onInit
-//		sw.print("self." + onInitMethod.getJsniSignature() + "(");
-//		String controllerParams = Joiner.on(", ").join(params);
-//		sw.print(controllerParams);
-//		sw.println(");");
-
 		//call initialize
 		sw.println("self.@" + typeName + AngularConventions.IMPL + "::initialize" + "(*)($scope);");
 
@@ -200,26 +193,6 @@ class ControllerGenerator extends Generator {
 
 
 
-	private static List<String> declareControllerParams(JParameter[] parameters,AngularGwtTypes types) {
-		List<String> params = new ArrayList<String>();
-		for (JParameter param : parameters) {
-			JClassType type = param.getType().isClassOrInterface();
-			if (isScope(type,types)) {
-				params.add("$scope");
-			} else if (isElement(type,types)) {
-				params.add("$element");
-			} else {
-				NgInject ngInject = type.getAnnotation(NgInject.class);
-				if (ngInject != null) {
-					params.add(ngInject.name());
-				}
-			}
-		}
-		return params;
-	}
-
-
-
 	private static boolean  isElement(JClassType ctype, AngularGwtTypes types) {
 		return ctype != null
 				&& (ctype.isAssignableTo(types.elementType) || ctype
@@ -279,23 +252,6 @@ class ControllerGenerator extends Generator {
 			}
 		}
 		return null;
-	}
-
-	private static JMethod findInitMethod(JClassType type, TreeLogger logger)
-			throws UnableToCompleteException {
-		JMethod onInit = null;
-		for (JMethod method : type.getMethods()) {
-			if (method.getName().equals("onInit")) {
-				if (onInit == null) {
-					onInit = method;
-				} else {
-					logger.log(TreeLogger.Type.ERROR, type.getName()
-							+ " has two onInit methods.");
-					throw new UnableToCompleteException();
-				}
-			}
-		}
-		return onInit;
 	}
 
 }
