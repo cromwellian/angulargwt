@@ -7,8 +7,8 @@ import java.util.Iterator;
 
 /**
  * Base class for all implementations of AngularJs conntrollers in GWT. To use,
- * subclass {@code AngularController} and define an <code>onInit</code> method taking at least one
- * {@link Scope} object. Each parameter of the <code>onInit</code> method is assumed to be an injectable type, either
+ * subclass {@code AngularController} and define the abstract methods.
+ * Each public field annotated as {@link NgInjected} is assumed to be an injectable type, either
  * a builtin type, or a custom injectable type defined by {@link NgInject}.
  * <p/>
  * <p>Any additional public methods defined will automatically be exported to the <code>$scope</code> object used by
@@ -16,7 +16,7 @@ import java.util.Iterator;
  * <p/>
  * <pre>
  *     public class MyController extends AngularController {
- *         public void onInit(Scope scope) {
+ *         public void initialize(Scope scope) {
  *             // publish key "foo" with value "bar" into $scope
  *             scope.put("foo", "bar");
  *         }
