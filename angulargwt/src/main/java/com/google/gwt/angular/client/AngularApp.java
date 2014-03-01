@@ -17,7 +17,7 @@ import elemental.js.util.JsArrayOfString;
  */
 public abstract class AngularApp extends AngularEntryPoint { 
 
-	private static final String ANGULAR_MIN_JS_URL = "http://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular.min.js";
+	private static final String ANGULAR_MIN_JS_URL = "https://ajax.googleapis.com/ajax/libs/angularjs/1.2.13/angular.min.js";
 
 	/**
 	 * This is the entry point method.
