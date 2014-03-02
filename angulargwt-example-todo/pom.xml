@@ -83,9 +83,9 @@
 			<groupId>com.github.h0ru5.gwt</groupId>
 			<artifactId>angulargwt</artifactId>
 			<version>1.1.4-SNAPSHOT</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 
-	<groupId>com.github.h0ru5.gwt</groupId>
 	<description>AngularJS Bridge to GWT - Todo Example</description>
 </project>

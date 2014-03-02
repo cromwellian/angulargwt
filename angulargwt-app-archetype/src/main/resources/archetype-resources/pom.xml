@@ -22,6 +22,7 @@
 			<artifactId>angulargwt</artifactId>
 			<version>\${angulargwt.version}</version>
 			<type>gwt-lib</type>
+			<scope>provided</scope>
 		</dependency><dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
