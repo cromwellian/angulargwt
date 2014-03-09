@@ -92,6 +92,12 @@
 			<type>gwt-lib</type>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-codeserver</artifactId>
+			<version>2.6.0</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<description>AngularJS Bridge to GWT - Tip Calc Example</description>
