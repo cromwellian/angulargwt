@@ -14,7 +14,7 @@ public class AngularGenerator extends Generator {
 	public String generate(TreeLogger logger, GeneratorContext context,
 			String typeName) throws UnableToCompleteException {
 
-		types=AngularGwtTypes.getInstanceFor(context);
+		types=AngularGwtTypes.createFor(context);
 
 		JClassType type = context.getTypeOracle().findType(typeName);
 		logger.log(TreeLogger.Type.DEBUG, "Generating " + typeName);
