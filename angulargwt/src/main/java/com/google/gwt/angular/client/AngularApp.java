@@ -2,11 +2,9 @@ package com.google.gwt.angular.client;
 
 import com.google.gwt.angular.client.impl.AngularModuleBase;
 import com.google.gwt.core.client.Callback;
-import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.ScriptInjector;
 import com.google.gwt.query.client.Function;
 import com.google.gwt.query.client.Promise;
-import com.google.gwt.query.client.Promise.Deferred;
 import com.google.gwt.query.client.plugins.deferred.PromiseFunction;
 
 import elemental.client.Browser;

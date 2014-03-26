@@ -1,6 +1,5 @@
 package com.google.gwt.angular.client;
 
-import com.google.gwt.core.client.JavaScriptObject;
 import elemental.json.JsonObject;
 import elemental.util.ArrayOf;
 

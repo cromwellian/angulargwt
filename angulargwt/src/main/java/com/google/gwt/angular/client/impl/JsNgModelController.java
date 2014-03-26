@@ -2,7 +2,7 @@ package com.google.gwt.angular.client.impl;
 
 import com.google.gwt.angular.client.JsNgParserFunction;
 import com.google.gwt.angular.client.NgModelController;
-import com.google.gwt.core.client.JavaScriptObject;
+
 import elemental.json.JsonObject;
 import elemental.util.ArrayOf;
 
