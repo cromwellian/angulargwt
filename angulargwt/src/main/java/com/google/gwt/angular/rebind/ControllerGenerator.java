@@ -18,8 +18,6 @@ import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JField;
 import com.google.gwt.core.ext.typeinfo.JMethod;
-import com.google.gwt.core.ext.typeinfo.JParameter;
-import com.google.gwt.core.ext.typeinfo.JPrimitiveType;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 
@@ -57,25 +55,7 @@ class ControllerGenerator extends Generator {
 		if (ngInject != null) {
 			controllerName = ngInject.name();
 		}
-		/*
-		 * Generates code that looks similar to this: var self=this;
-		 * $wnd.TodoController = $entry(function ($scope, $element) { var
-		 * wrapScope =
-		 * @com.google.gwt.angular.client.todomvc.BodyScopeAdapter::new
-		 * (Lelemental/json/JsonObject;)($scope);
-		 * self.@com.google.gwt.angular.client
-		 * .AngularController::setScope(Lcom/google
-		 * /gwt/angular/client/Scope;)(wrapScope);
-		 * self.@com.google.gwt.angular.client
-		 * .todomvc.TodoController::onInit(Lcom
-		 * /google/gwt/angular/client/TodoScope
-		 * ;Lcom/google/gwt/dom/client/Element;)(wrapScope, $element);
-		 * $scope.doSomething = $entry(function() { return
-		 * self.@com.google.gwt.angular
-		 * .client.todomvc.TodoController::doSomething()(); }); });
-		 * $wnd.TodoController.$inject = ['$scope', '$element'];
-		 */
-//		JMethod onInitMethod = findInitMethod(type, logger);
+		
 		JClassType scopeClass = findScopeClass(type,types);
 
 		String scopeAdapter = null;
@@ -123,11 +103,11 @@ class ControllerGenerator extends Generator {
 		sw.println("self.@" + typeName + AngularConventions.IMPL + "::initialize" + "(*)($scope);");
 
 		for (JMethod action : publicActionMethods(type)) {
-			String argString = declareArgs(action);
+			String argString = ClassHelper.declareArgs(action);
 			sw.println("$scope." + action.getName() + " = $entry(function("
 					+ argString + ") {");
 			sw.indent();
-			sw.print(isVoidMethod(action) ? "" : "return ");
+			sw.print(ClassHelper.isVoidMethod(action) ? "" : "return ");
 			sw.print("self." + action.getJsniSignature());
 			sw.println("(" + argString + ");");
 			sw.outdent();
@@ -136,11 +116,11 @@ class ControllerGenerator extends Generator {
 
 		for (JMethod action : watchMethods(type)) {
 			NgWatch watchParams = action.getAnnotation(NgWatch.class);
-			String argString = declareArgs(action);
+			String argString = ClassHelper.declareArgs(action);
 			sw.println("$scope.$watch('" + watchParams.value()
 					+ "', $entry(function(" + argString + ") {");
 			sw.indent();
-			sw.print(isVoidMethod(action) ? "" : "return ");
+			sw.print(ClassHelper.isVoidMethod(action) ? "" : "return ");
 			sw.print("self." + action.getJsniSignature());
 			sw.println("(" + argString + ");");
 			sw.outdent();
@@ -191,8 +171,6 @@ class ControllerGenerator extends Generator {
 		return injects;
 	}
 
-
-
 	private static boolean  isElement(JClassType ctype, AngularGwtTypes types) {
 		return ctype != null
 				&& (ctype.isAssignableTo(types.elementType) || ctype
@@ -203,28 +181,10 @@ class ControllerGenerator extends Generator {
 		return ctype != null && ctype.isAssignableTo(types.scopeType);
 	}
 
-	private static String declareArgs(JMethod action) {
-		StringBuilder args = new StringBuilder();
-		for (int i = 0; i < action.getParameters().length; i++) {
-			if (i > 0) {
-				args.append(", ");
-			}
-			args.append("arg").append(i);
-		}
-		return args.toString();
-	}
-
-	private static boolean isVoidMethod(JMethod method) {
-		return method.getReturnType() == JPrimitiveType.VOID;
-	}
-
 	private static Collection<JMethod> publicActionMethods(JClassType type) {
 		Collection<JMethod> methods = new ArrayList<JMethod>();
-		for (JMethod method : type.getMethods()) {
+		for(JMethod method : ClassHelper.publicMethods(type)) {
 			if (method.getAnnotation(NgWatch.class) != null) {
-				continue;
-			}
-			if (method.isPublic() && !method.isAbstract() && !method.isStatic()) {
 				methods.add(method);
 			}
 		}

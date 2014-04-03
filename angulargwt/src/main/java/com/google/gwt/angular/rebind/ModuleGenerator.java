@@ -1,13 +1,19 @@
 package com.google.gwt.angular.rebind;
 
 import java.io.PrintWriter;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 
+import com.google.common.collect.Iterables;
 import com.google.gwt.angular.client.AngularController;
 import com.google.gwt.angular.client.AngularModule;
 import com.google.gwt.angular.client.Directive;
 import com.google.gwt.angular.client.NgDepends;
 import com.google.gwt.angular.client.NgInject;
 import com.google.gwt.angular.client.NgName;
+import com.google.gwt.angular.client.NgWatch;
 import com.google.gwt.angular.client.Util;
 import com.google.gwt.angular.client.impl.AngularModuleBase;
 import com.google.gwt.core.client.GWT;
@@ -15,6 +21,8 @@ import com.google.gwt.core.ext.Generator;
 import com.google.gwt.core.ext.GeneratorContext;
 import com.google.gwt.core.ext.TreeLogger;
 import com.google.gwt.core.ext.typeinfo.JClassType;
+import com.google.gwt.core.ext.typeinfo.JMethod;
+import com.google.gwt.thirdparty.guava.common.base.Predicate;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 
@@ -22,6 +30,8 @@ public class ModuleGenerator extends Generator {
 
 	private static ModuleGenerator instance;
 
+		
+	
 	public String generate(TreeLogger logger, GeneratorContext context, String typeName) {
 		JClassType type = context.getTypeOracle().findType(typeName);
 		
@@ -100,7 +110,8 @@ public class ModuleGenerator extends Generator {
 						sw.println("module.factory('" + ngInject.name()
 								+ "', function() {");
 						sw.indent();
-						sw.println(" return args[" + i + "];");
+						JClassType serviceType = context.getTypeOracle().findType(clazz.getName()); 
+						generateService(sw, i,serviceType);
 						sw.outdent();
 						sw.println("});");
 					}
@@ -124,6 +135,32 @@ public class ModuleGenerator extends Generator {
 		return implTypeName;
 	}
 
+	private void generateService(SourceWriter sw, int argNumber, JClassType serviceType) {
+		final String instance = "args[" + argNumber + "]";
+		boolean first=true;
+		sw.println("return {");
+		sw.indent();
+		for(JMethod m : ClassHelper.publicMethods(serviceType)) {
+			if(!first) 
+				sw.print(",");
+			else
+				first=false;
+			
+			String argString = ClassHelper.declareArgs(m);
+			sw.println(m.getName() + " : $entry(function("
+					+ argString + ") {");
+			sw.indent();
+			sw.print(ClassHelper.isVoidMethod(m) ? "" : "return ");
+			sw.print(instance + "." + m.getJsniSignature());
+			sw.println("(" + argString + ");");
+			sw.outdent();
+			sw.println("})");	
+		}
+		sw.outdent();
+		sw.println("};");
+		//sw.println(" return " + instance + ";");
+	}
+	
 	public static ModuleGenerator get() {
 		if(instance==null) instance=new ModuleGenerator();
 		return instance;
