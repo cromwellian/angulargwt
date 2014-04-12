@@ -18,7 +18,7 @@ public class TodoController extends AngularController<TodoScope> {
 	
 	@NgInjected	public Location location;
 	@NgInjected	public TodoStorage store;
-	@NgInjected	public TodoFilter filterFilter;
+	@NgInjected	public TodoFilter todoFilter;
 
 	@Override
 	protected void initialize(TodoScope scope) {
@@ -36,7 +36,7 @@ public class TodoController extends AngularController<TodoScope> {
 	public void $watchTodos() {
 		Todo todoPredicate = makeTodo();
 		todoPredicate.setCompleted(false);
-		scope.remainingCount(filterFilter.filter(todos, todoPredicate).length())
+		scope.remainingCount(todoFilter.filter(todos, todoPredicate).length())
 		.doneCount(todos.length() - scope.remainingCount())
 		.allChecked(scope.remainingCount() != 0);
 		store.put(todos);
@@ -52,7 +52,7 @@ public class TodoController extends AngularController<TodoScope> {
 
 	@NgWatch("statusFilter")
 	public void $watchStatusFilter(Todo statusFilter) {
-		scope.todos(filterFilter.filter(todos,statusFilter));
+		scope.todos(todoFilter.filter(todos,statusFilter));
 	}
 
 	private Todo makeTodo() {
@@ -96,7 +96,7 @@ public class TodoController extends AngularController<TodoScope> {
 		Todo todoPredicate = makeTodo();
 		todoPredicate.setCompleted(false);
 
-		ArrayOf<Todo> result = filterFilter.filter(todos, todoPredicate);
+		ArrayOf<Todo> result = todoFilter.filter(todos, todoPredicate);
 
 		todos=result;
 		scope.todos(result);
