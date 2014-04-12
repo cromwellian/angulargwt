@@ -1,38 +1,31 @@
 package com.google.gwt.angular.rebind;
 
 import java.io.PrintWriter;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 
-import com.google.common.collect.Iterables;
 import com.google.gwt.angular.client.AngularController;
 import com.google.gwt.angular.client.AngularModule;
 import com.google.gwt.angular.client.Directive;
+import com.google.gwt.angular.client.Filter;
 import com.google.gwt.angular.client.NgDepends;
 import com.google.gwt.angular.client.NgInject;
 import com.google.gwt.angular.client.NgName;
-import com.google.gwt.angular.client.NgWatch;
 import com.google.gwt.angular.client.Util;
 import com.google.gwt.angular.client.impl.AngularModuleBase;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.ext.Generator;
 import com.google.gwt.core.ext.GeneratorContext;
 import com.google.gwt.core.ext.TreeLogger;
+import com.google.gwt.core.ext.UnableToCompleteException;
 import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JMethod;
-import com.google.gwt.thirdparty.guava.common.base.Predicate;
 import com.google.gwt.user.rebind.ClassSourceFileComposerFactory;
 import com.google.gwt.user.rebind.SourceWriter;
 
 public class ModuleGenerator extends Generator {
 
 	private static ModuleGenerator instance;
-
-		
 	
-	public String generate(TreeLogger logger, GeneratorContext context, String typeName) {
+	public String generate(TreeLogger logger, GeneratorContext context, String typeName) throws UnableToCompleteException {
 		JClassType type = context.getTypeOracle().findType(typeName);
 		
 		NgDepends deps = type.getAnnotation(NgDepends.class);
@@ -95,8 +88,14 @@ public class ModuleGenerator extends Generator {
 			int i = 0;
 			for (Class<?> clazz : deps.value()) {
 				NgInject ngInject = clazz.getAnnotation(NgInject.class);
-				if (ngInject != null) {
-					// is an injectible
+				final String compInstance = "args[" + ++i + "]";
+				
+				// automatically adding inject based on classname to filters that are not annotated
+				if (Filter.class.isAssignableFrom(clazz)) {
+					FilterGenerator.generateFilter(context,sw,clazz,ngInject,compInstance);
+				} else if (ngInject != null) {
+				// is an injectible
+					
 					if (AngularController.class.isAssignableFrom(clazz)) {
 						// is a controller
 						sw.println("args["
@@ -111,14 +110,18 @@ public class ModuleGenerator extends Generator {
 								+ "', function() {");
 						sw.indent();
 						JClassType serviceType = context.getTypeOracle().findType(clazz.getName()); 
-						generateService(sw, i,serviceType);
+						generateService(sw, compInstance,serviceType);
 						sw.outdent();
 						sw.println("});");
 					}
 				} else if (Directive.class.isAssignableFrom(clazz)) {
+					// is a directive
 					DirectiveGenerator.generateDirectives(context, sw, clazz);
+				} else {
+					logger.log(TreeLogger.Type.ERROR, "Unknown type of component: "
+							+ clazz.getSimpleName() + "\nDid you forget to add @NgInject?");
+					throw new UnableToCompleteException();
 				}
-				i++;
 			}
 		}
 		sw.println("}-*/;");
@@ -135,8 +138,8 @@ public class ModuleGenerator extends Generator {
 		return implTypeName;
 	}
 
-	private void generateService(SourceWriter sw, int argNumber, JClassType serviceType) {
-		final String instance = "args[" + argNumber + "]";
+	private static void generateService(SourceWriter sw, final String instance, JClassType serviceType) {
+		
 		boolean first=true;
 		sw.println("return {");
 		sw.indent();

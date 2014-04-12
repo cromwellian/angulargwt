@@ -7,6 +7,10 @@ import com.google.gwt.core.ext.typeinfo.JClassType;
 import com.google.gwt.core.ext.typeinfo.JMethod;
 import com.google.gwt.core.ext.typeinfo.JPrimitiveType;
 
+/**
+ * @author h0ru5
+ *
+ */
 public class ClassHelper {
 
 	public static String declareArgs(JMethod action) {
@@ -32,6 +36,15 @@ public class ClassHelper {
 			}
 		}
 		return methods;
+	}
+
+	public static JMethod methodByName(JClassType type, String methodName) {
+		for (JMethod method : type.getMethods()) {
+			if (method.getName().equals(methodName)) {
+				return method;
+			}
+		}
+		return null;
 	}
 
 }
