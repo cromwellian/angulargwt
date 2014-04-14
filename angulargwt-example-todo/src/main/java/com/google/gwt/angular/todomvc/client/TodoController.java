@@ -50,6 +50,9 @@ public class TodoController extends AngularController<TodoScope> {
 							makeTodo().setCompleted(true) : null);
 	}
 
+	//Note: you can leave this out and do the filtering on the template
+	// todos | todo:statusFilter (as TodoFilter is in fact the filterFilter, you can also use filter)
+	//performance could be better if filtered in controller (less watches)
 	@NgWatch("statusFilter")
 	public void $watchStatusFilter(Todo statusFilter) {
 		scope.todos(todoFilter.filter(todos,statusFilter));
