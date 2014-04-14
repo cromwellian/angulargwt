@@ -88,7 +88,7 @@ public class ModuleGenerator extends Generator {
 			int i = 0;
 			for (Class<?> clazz : deps.value()) {
 				NgInject ngInject = clazz.getAnnotation(NgInject.class);
-				final String compInstance = "args[" + ++i + "]";
+				final String compInstance = "args[" + i++ + "]";
 				
 				// automatically adding inject based on classname to filters that are not annotated
 				if (Filter.class.isAssignableFrom(clazz)) {
@@ -98,9 +98,8 @@ public class ModuleGenerator extends Generator {
 					
 					if (AngularController.class.isAssignableFrom(clazz)) {
 						// is a controller
-						sw.println("args["
-								+ i
-								+ "].@"
+						sw.println(compInstance
+								+ ".@"
 								+ AngularController.class.getName()
 								+ "::register"
 								+ "(Lcom/google/gwt/core/client/JavaScriptObject;)(module);");
