@@ -184,7 +184,7 @@ class ControllerGenerator extends Generator {
 	private static Collection<JMethod> publicActionMethods(JClassType type) {
 		Collection<JMethod> methods = new ArrayList<JMethod>();
 		for(JMethod method : ClassHelper.publicMethods(type)) {
-			if (method.getAnnotation(NgWatch.class) != null) {
+			if (method.getAnnotation(NgWatch.class) == null) {
 				methods.add(method);
 			}
 		}
