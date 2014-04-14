@@ -22,7 +22,6 @@ public abstract class AngularApp extends AngularEntryPoint {
 	 */
 	public final void onModuleLoad() {
 		loadAngular();
-		super.onModuleLoad();
 	}
 
 	private void loadAngular() {
@@ -49,6 +48,7 @@ public abstract class AngularApp extends AngularEntryPoint {
 	}
 
 	private void injectModules() {
+		super.onModuleLoad();
 		final JsArrayOfString moduleNames = JsArrayOfString.create();
 		final AngularModule[] modules = main();
 		for (int i = 0; i < modules.length; i++) {
