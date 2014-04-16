@@ -106,7 +106,7 @@ public class MyLib extends AngularEntryPoint {
 }
 ```
 
-If you use this lib in Java (use case 1), you just add the classes vand sources to the classpath (or let Maven do it).
+If you use this lib in Java (use case 1), you just add the classes and sources to the classpath (or let Maven do it).
 
 If you use the compiled library as javascript in a regular AngularJS app (use case 2) then you have to delay the bootstrapping until the async loading of GWT has finished, this is done via a callback called ``angularGwtModuleLoaded``.
 
