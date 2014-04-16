@@ -50,7 +50,7 @@ public class DirectiveGenerator {
 		sw.indent();
 		sw.println("return { ");
 		sw.indent();
-
+		//TODO: implement templateUrl here ?
 		ArrayList<String> linkPassedParams = new ArrayList<String>();
 		linkPassedParams.add("scope");
 		linkPassedParams.add("element");
