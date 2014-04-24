@@ -9,4 +9,6 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface NgDirective {
   String value();
+  String templateUrl() default "";
+  String restrict() default "AEC";
 }
