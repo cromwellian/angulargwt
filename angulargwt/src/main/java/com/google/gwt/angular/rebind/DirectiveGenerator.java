@@ -19,38 +19,49 @@ public class DirectiveGenerator {
 		// class of a directive
 		JClassType dType = context.getTypeOracle().findType(clazz.getName());
 		NgDirective ngDirective = dType.getAnnotation(NgDirective.class);
-		
 			// a method annotated as directive
 			if (ngDirective != null ) {
 				sw.print("module.directive('" + ngDirective.value() + "',[ ");
-				generateSingleDirective(sw, dType);
+				generateSingleDirective(sw, dType,ngDirective);
 				sw.println("]);");
 			}
 	}
 
-	private static void generateSingleDirective(SourceWriter sw, JClassType dType) {
+	private static void generateSingleDirective(SourceWriter sw, JClassType dType, NgDirective ngDirective ) {
 
 		//find initmethod
 		JMethod initMethod = dType.findMethod("init", new JType[0]);
 		
 		//find injected components
 		List<Injection> injects = Injection.getInjectedFields(dType);
-
+		
 		List<String> params = Lists.transform(injects,Injection.toName);
 		
 		if(!params.isEmpty()) {
 			sw.print("\'" +
 					Joiner.on("\', " + "\'").join(params)
 					+  "\', ");			
-		}  
-				
+		}
+		
 		sw.print("function (");
 		String paramString = Joiner.on(",").join(params);
 		sw.println(paramString + ") {");
 		sw.indent();
 		sw.println("return { ");
 		sw.indent();
+		
+		
+		if (!ngDirective.templateUrl().isEmpty()) {
+			sw.println("templateUrl : \""+ ngDirective.templateUrl() +"\",");
+		}
+
+		
+		if (!ngDirective.restrict().isEmpty()) {
+			sw.println("restrict : \""+ ngDirective.restrict() +"\",");
+		}
+
 		//TODO: implement templateUrl here ?
+		
 		ArrayList<String> linkPassedParams = new ArrayList<String>();
 		linkPassedParams.add("scope");
 		linkPassedParams.add("element");
@@ -58,15 +69,17 @@ public class DirectiveGenerator {
 		
 		List<String> requires = getRequires(dType);
 		
+		//angularJS configurations
 		for(int requireCount = 0;requireCount < requires.size();requireCount++)
 			linkPassedParams.add("requires[" + requireCount + "]");
-
-		String linkArgs = "(scope,element,attrs"
-				+ (!requires.isEmpty() ? ", " + "requires" : "") + ")";
 
 		if (!requires.isEmpty()) {
 			sw.println("require: ['" + Joiner.on("', '").join(requires) + "'],");
 		}
+		
+		//link function 
+		String linkArgs = "(scope,element,attrs"
+				+ (!requires.isEmpty() ? ", " + "requires" : "") + ")";
 		
 		sw.println("link: function" + linkArgs + " {");
 		sw.indent();
@@ -108,7 +121,6 @@ public class DirectiveGenerator {
 		List<String> requires = new ArrayList<String>();
 		return requires;
 		//Dead code: inter-directive communication with require and controllers
-		
 //		for (JField rt : dType.getFields()) {
 //			JClassType lpType = rt.getType().isClassOrInterface();
 //			if (lpType != null) {
