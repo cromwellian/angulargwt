@@ -20,7 +20,7 @@ public class CspLinker extends CrossSiteIframeLinker {
    */
  @Override
   protected String getJsInstallLocation(LinkerContext context) {
-    return "com/google/gwt/core/ext/linker/impl/installLocationMainWindow.js";
+    return "com/google/gwt/angular/rebind/installCspSafe.js";
   }
 
   /**
