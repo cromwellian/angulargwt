@@ -50,17 +50,21 @@ public class DirectiveGenerator {
 		sw.println("return { ");
 		sw.indent();
 		
-		
 		if (!ngDirective.templateUrl().isEmpty()) {
 			sw.println("templateUrl : \""+ ngDirective.templateUrl() +"\",");
 		}
-
+		
+		if (!ngDirective.template().isEmpty()){
+			sw.println("template : \"" + ngDirective.template() +"\",");
+		}
 		
 		if (!ngDirective.restrict().isEmpty()) {
 			sw.println("restrict : \""+ ngDirective.restrict() +"\",");
 		}
 
-		//TODO: implement templateUrl here ?
+//		if (!ngDirective.restrict().isEmpty()){
+//			sw.println("controller : \""+ ngDirective.controller() +"\",");
+//		}
 		
 		ArrayList<String> linkPassedParams = new ArrayList<String>();
 		linkPassedParams.add("scope");

@@ -10,5 +10,7 @@ import java.lang.annotation.RetentionPolicy;
 public @interface NgDirective {
   String value();
   String templateUrl() default "";
+  String template() default "";
   String restrict() default "AEC";
+//  String controller() default "";
 }
