@@ -2,14 +2,8 @@
 <module rename-to='angulargwt_todo'>
 
 	<inherits name="com.google.gwt.angular.angulargwt" />
+	<inherits name="com.github.h0ru5.gwt.chromeapp" />
 
 	<!-- Specify the app entry point class. -->
 	<entry-point class='com.google.gwt.angular.todomvc.client.TodoApp' />
-
-	
-	<!-- SuperDev -->
-	<add-linker name="xsiframe" />
-	<set-configuration-property name='xsiframe.failIfScriptTag' value='FALSE'/>
-	<set-configuration-property name="devModeRedirectEnabled"	value="true" />
-	<set-property name="compiler.useSourceMaps" value="true" />
 </module>

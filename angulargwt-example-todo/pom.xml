@@ -91,6 +91,12 @@
 			<version>2.6.0</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.github.h0ru5.gwt</groupId>
+			<artifactId>gwt-chromeapp</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<type>gwt-lib</type>
+		</dependency>
 	</dependencies>
 
 	<description>AngularJS Bridge to GWT - Todo Example</description>
