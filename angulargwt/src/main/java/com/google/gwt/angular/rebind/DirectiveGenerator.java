@@ -1,7 +1,13 @@
 package com.google.gwt.angular.rebind;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
@@ -51,20 +57,35 @@ public class DirectiveGenerator {
 		sw.indent();
 		
 		if (!ngDirective.templateUrl().isEmpty()) {
-			sw.println("templateUrl : \""+ ngDirective.templateUrl() +"\",");
+			
+			if(!ngDirective.inlineTemplate()){
+				sw.println("templateUrl : '"+ ngDirective.templateUrl() +"',");
+			} else {
+				
+				try {
+					String template = new Scanner(new File(ngDirective.templateUrl())).useDelimiter("\\Z").next();
+					template = template.replace("\n", "").replace("\r", "");
+					sw.println("template : '"+ template +"',");
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+
 		}
 		
-		if (!ngDirective.template().isEmpty()){
-			sw.println("template : \"" + ngDirective.template() +"\",");
-		}
+//		if (!ngDirective.template().isEmpty()){
+//			sw.println("template : \"" + ngDirective.template() +"\",");
+//		}
 		
 		if (!ngDirective.restrict().isEmpty()) {
 			sw.println("restrict : \""+ ngDirective.restrict() +"\",");
 		}
-
-//		if (!ngDirective.restrict().isEmpty()){
-//			sw.println("controller : \""+ ngDirective.controller() +"\",");
-//		}
+		
+		if (ngDirective.transclude()) {
+			sw.println("transclude : true,");
+		}
 		
 		ArrayList<String> linkPassedParams = new ArrayList<String>();
 		linkPassedParams.add("scope");
@@ -120,7 +141,7 @@ public class DirectiveGenerator {
 		sw.println("}");
 		
 	}
-
+	
 	public static List<String> getRequires(JClassType dType) {
 		List<String> requires = new ArrayList<String>();
 		return requires;
