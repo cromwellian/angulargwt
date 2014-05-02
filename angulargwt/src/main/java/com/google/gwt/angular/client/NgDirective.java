@@ -11,4 +11,6 @@ public @interface NgDirective {
   String value();
   String templateUrl() default "";
   String restrict() default "AEC";
+  boolean transclude() default false;
+  boolean inlineTemplate() default true;
 }
