@@ -94,7 +94,7 @@
 		<dependency>
 			<groupId>com.github.h0ru5.gwt</groupId>
 			<artifactId>gwt-chromeapp</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.0.1</version>
 			<type>gwt-lib</type>
 		</dependency>
 	</dependencies>
