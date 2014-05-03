@@ -140,7 +140,7 @@ public class ModuleGenerator extends Generator {
 	private static void generateService(SourceWriter sw, final String instance, JClassType serviceType) {
 		
 		boolean first=true;
-		sw.println("return {");
+		sw.println("return $wnd.angular.extend(" + instance +",{");
 		sw.indent();
 		for(JMethod m : ClassHelper.publicMethods(serviceType)) {
 			if(!first) 
@@ -159,7 +159,7 @@ public class ModuleGenerator extends Generator {
 			sw.println("})");	
 		}
 		sw.outdent();
-		sw.println("};");
+		sw.println("});");
 		//sw.println(" return " + instance + ";");
 	}
 	
