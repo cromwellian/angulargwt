@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to='angulargwt_todo'>
+
+	<inherits name="com.google.gwt.angular.angulargwt" />
+	<inherits name="com.github.h0ru5.gwt.chromeapp" />
+
+	<!-- Specify the app entry point class. -->
+	<entry-point class='com.google.gwt.angular.todomvc.client.TodoApp' />
+</module>

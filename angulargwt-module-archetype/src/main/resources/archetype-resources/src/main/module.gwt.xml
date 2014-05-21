@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to='${moduleName}'>
+
+	<inherits name="com.google.gwt.angular.angulargwt" />
+	
+	<entry-point class="${package}.${moduleName}Entry"/>
+	
+	<!-- look for sources at same folder level (src/main/java) -->
+	<source path="" />
+	
+	<!-- SuperDev -->
+	<add-linker name="xsiframe" />
+	<set-configuration-property name='xsiframe.failIfScriptTag' value='FALSE'/>
+	<set-configuration-property name="devModeRedirectEnabled"	value="true" />
+	<set-property name="compiler.useSourceMaps" value="true" />
+</module>

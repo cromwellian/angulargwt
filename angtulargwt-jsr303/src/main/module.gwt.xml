@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to='Jsr303'>
+
+	<inherits name="com.google.gwt.angular.angulargwt" />
+	
+	<inherits name="org.hibernate.validator.HibernateValidator" />
+
+<!--     <replace-with -->
+<!--             class="com.google.gwt.angtulargwt.jsr303.client.Jsr303ValidationFactory"> -->
+<!--         <when-type-is class="javax.validation.ValidatorFactory" /> -->
+<!--     </replace-with> -->
+    
+    <generate-with class="com.google.gwt.angtulargwt.jsr303.rebind.AngularValidatorGenerator">
+        <when-type-assignable class="com.google.gwt.angtulargwt.jsr303.client.NgValidator"/>
+    </generate-with>
+    
+	<!-- look for sources at same folder level (src/main/java) -->
+    <source path="client" />
+	
+	<!-- SuperDev -->
+	<add-linker name="xsiframe" />
+	<set-configuration-property name='xsiframe.failIfScriptTag' value='FALSE'/>
+	<set-configuration-property name="devModeRedirectEnabled"	value="true" />
+	<set-property name="compiler.useSourceMaps" value="true" />
+</module>

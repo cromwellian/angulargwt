@@ -1,0 +1,102 @@
+<!doctype html>
+<!-- The DOCTYPE declaration above will set the    -->
+<!-- browser's rendering engine into               -->
+<!-- "Standards Mode". Replacing this declaration  -->
+<!-- with a "Quirks Mode" doctype may lead to some -->
+<!-- differences in layout.                        -->
+
+<html lang="en">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta charset='utf-8' />
+
+    <!--                                                               -->
+    <!-- Consider inlining CSS to reduce the number of requested files -->
+    <!--                                                               -->
+    <link rel="stylesheet" href="base.css">
+    <!--                                           -->
+    <!-- Any title is fine                         -->
+    <!--                                           -->
+    <title>Angular GWT - TodoMVC example</title>
+
+    <!--                                           -->
+    <!-- This script loads your compiled module.   -->
+    <!-- If you add any GWT meta tags, they must   -->
+    <!-- be added before this line.                -->
+    <!--                                           -->
+    <script src="angulargwt_todo/angulargwt_todo.nocache.js"></script>
+</head>
+
+<!--                                           -->
+<!-- The body can have arbitrary html, or      -->
+<!-- you can leave the body empty if you want  -->
+<!-- to create a completely dynamic UI.        -->
+<!--                                           -->
+<body>
+<section id="todoapp" ng-controller="TodoCtrl">
+    <header id="header">
+        <h1>todos</h1>
+
+        <form id="todo-form" ng-submit="addTodo()">
+            <input id="new-todo" placeholder="What needs to be done?" ng-model="newTodo" autofocus>
+        </form>
+    </header>
+    <section id="main" ng-show="todos.length" ng-cloak>
+        <input id="toggle-all" type="checkbox" ng-model="allChecked" ng-click="markAll(allChecked)">
+        <label for="toggle-all">Mark all as complete</label>
+        <ul id="todo-list">
+            <li ng-repeat="todo in todos track by $index | filter:statusFilter"
+                ng-class="{completed: todo.completed == true, editing: todo == editedTodo}">
+                <div class="view">
+                    <input class="toggle" type="checkbox" ng-model="todo.completed">
+                    <label ng-dblclick="editTodo(todo)">{{todo.title}}</label>
+                    <button class="destroy" ng-click="removeTodo(todo)"></button>
+                </div>
+                <form ng-submit="doneEditing(todo)">
+                    <input class="edit" ng-model="todo.title" todo-blur="doneEditing(todo)"
+                           todo-focus="todo == editedTodo">
+                </form>
+            </li>
+        </ul>
+    </section>
+    <footer id="footer" ng-show="todos.length" ng-cloak>
+			<span id="todo-count">
+                <strong>{{remainingCount}}</strong>
+				<ng-pluralize count="remainingCount"
+                              when="{ one: 'item left', other: 'items left' }"></ng-pluralize>
+			</span>
+        <ul id="filters">
+            <li>
+                <a ng-class="{selected: location.path() == '/'} " href="#/">All</a>
+            </li>
+            <li>
+                <a ng-class="{selected: location.path() == '/active'}" href="#/active">Active</a>
+            </li>
+            <li>
+                <a ng-class="{selected: location.path() == '/completed'}" href="#/completed">Completed</a>
+            </li>
+        </ul>
+        <button id="clear-completed" ng-click="clearDoneTodos()" ng-show="doneCount">Clear completed
+            ({{doneCount}})
+        </button>
+    </footer>
+</section>
+<footer id="info">
+    <p>Double-click to edit a todo</p>
+
+    <p>Credits:
+        <a href="http://twitter.com/cburgdorf">Christoph Burgdorf</a>,
+        <a href="http://ericbidelman.com">Eric Bidelman</a>,
+        <a href="http://jacobmumm.com">Jacob Mumm</a>
+        <a href="http://igorminar.com">Igor Minar</a> and <br>
+        <a href="https://plus.google.com/110412141990454266397/posts">Ray Cromwell</a> (GWT Version)
+    </p>
+
+    <p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
+
+    <p style="color: black">
+        <a href="http://github.com/cromwellian/angulargwt">Using AngularGWT</a>
+    </p>
+</footer>
+</body>
+</html>

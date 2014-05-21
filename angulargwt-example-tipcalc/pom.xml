@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>angulargwt-example-tipcalc</artifactId>
+
+	<packaging>war</packaging>
+	<name>AngularGWT - Tip Calc Example</name>
+
+	<url>https://github.com/h0ru5/angulargwt</url>
+
+	<parent>
+		<groupId>com.github.h0ru5.gwt</groupId>
+		<artifactId>angulargwt-parent</artifactId>
+		<version>1.1.4-SNAPSHOT</version>
+		<relativePath>..</relativePath>
+	</parent>
+
+	<properties>
+		<gwt.module>com.google.gwt.angular.tipcalc.Example</gwt.module>
+	</properties>
+
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>net.ltgt.gwt.maven</groupId>
+				<artifactId>gwt-maven-plugin</artifactId>
+				   <executions>
+          <execution>
+            <goals>
+              <goal>generate-module</goal>
+              <goal>compile</goal>
+            </goals>
+          </execution>
+        </executions>
+				<configuration>
+					<moduleName>${gwt.module}</moduleName>
+					<strict>true</strict>
+					<outputGen>true</outputGen>
+				</configuration>
+			</plugin>
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											net.ltgt.gwt.maven
+										</groupId>
+										<artifactId>
+											gwt-maven-plugin
+										</artifactId>
+										<versionRange>
+											[1.0-alpha-2,)
+										</versionRange>
+										<goals>
+											<goal>generate-module</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.github.h0ru5.gwt</groupId>
+			<artifactId>angulargwt</artifactId>
+			<version>1.1.4-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.github.h0ru5.gwt</groupId>
+			<artifactId>angulargwt-jsr303</artifactId>
+			<version>1.1.4-SNAPSHOT</version>
+			<type>gwt-lib</type>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-codeserver</artifactId>
+			<version>2.6.0</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<description>AngularJS Bridge to GWT - Tip Calc Example</description>
+</project>

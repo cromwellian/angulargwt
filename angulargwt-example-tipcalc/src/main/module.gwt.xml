@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to="tipcalc">
+
+    <inherits name="com.google.gwt.angular.angulargwt"/>
+    <inherits name="com.google.gwt.angtulargwt.jsr303.Jsr303"/>
+
+    <inherits name="elemental.Elemental"/>
+    
+    <replace-with
+            class="com.google.gwt.angular.tipcalc.client.ValidationFactory">
+        <when-type-is class="javax.validation.ValidatorFactory" />
+    </replace-with>
+
+    <!-- Specify the app entry point class.                         -->
+    <entry-point class='com.google.gwt.angular.tipcalc.client.TipCalcApp'/>
+    
+    <!-- SuperDev -->
+	<add-linker name="xsiframe" />
+	<set-configuration-property name='xsiframe.failIfScriptTag' value='FALSE'/>
+	<set-configuration-property name="devModeRedirectEnabled"	value="true" />
+	<set-property name="compiler.useSourceMaps" value="true" />
+</module>
