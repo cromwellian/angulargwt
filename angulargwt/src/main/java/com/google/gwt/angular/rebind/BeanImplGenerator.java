@@ -17,7 +17,11 @@ class BeanImplGenerator {
 		sw.println("protected " + simpleName + "() {}");
 	
 		// getters and setters
-		for (JMethod method : scopeClass.getMethods()) {
+		for (JMethod method : scopeClass.getInheritableMethods()) {
+
+			//since our bean cannot inherit the method json() from JsoModelBase, we have to block this getter
+			if(method.getName().equals("json")) continue;
+			
 			if (isGetter(method)) {
 				JPrimitiveType pType = method.getReturnType().isPrimitive();
 				if (pType != null) {
