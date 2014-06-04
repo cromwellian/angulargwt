@@ -185,8 +185,8 @@ class BeanImplGenerator {
 	private static boolean isGetter(JMethod method) {
 		String name = method.getName();
 		// traditional Type getFooField() or boolean Type isFoo() JavaBean getter
-		if (name.startsWith("get") && Character.isUpperCase(name.charAt(3))
-				|| name.startsWith("is") && Character.isUpperCase(name.charAt(2))) {
+		if ((name.startsWith("get") && Character.isUpperCase(name.charAt(3)))
+				|| (name.startsWith("is") && Character.isUpperCase(name.charAt(2)))) {
 			return method.getParameters().length == 0;
 			// non traditional Type foo() getter, needs to have paired setter to
 			// be detected correctly
