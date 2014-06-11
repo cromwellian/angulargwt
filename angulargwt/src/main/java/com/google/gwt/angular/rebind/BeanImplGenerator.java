@@ -17,7 +17,11 @@ class BeanImplGenerator {
 		sw.println("protected " + simpleName + "() {}");
 	
 		// getters and setters
-		for (JMethod method : scopeClass.getMethods()) {
+		for (JMethod method : scopeClass.getInheritableMethods()) {
+
+			//since our bean cannot inherit the method json() from JsoModelBase, we have to block this getter
+			if(method.getName().equals("json")) continue;
+			
 			if (isGetter(method)) {
 				JPrimitiveType pType = method.getReturnType().isPrimitive();
 				if (pType != null) {
@@ -75,7 +79,7 @@ class BeanImplGenerator {
 						.isPrimitive();
 				if (pType != null) {
 					if (pType != JPrimitiveType.BOOLEAN) {
-						sw.println("final public " + fluentOrVoid(method) + " "
+						sw.println("final public " + fluentOrVoid(method,simpleName) + " "
 								+ method.getName() + "("
 								+ pType.getSimpleSourceName() + " arg) {");
 						sw.indent();
@@ -85,7 +89,7 @@ class BeanImplGenerator {
 						sw.outdent();
 						sw.println("}");
 					} else if (pType == JPrimitiveType.BOOLEAN) {
-						sw.println("final public " + fluentOrVoid(method) + " "
+						sw.println("final public " + fluentOrVoid(method,simpleName) + " "
 								+ method.getName() + "" + "(boolean "
 								+ " arg) {");
 						sw.indent();
@@ -102,7 +106,7 @@ class BeanImplGenerator {
 					JClassType cType = method.getParameters()[0].getType()
 							.isClassOrInterface();
 					if (cType.isAssignableTo(types.stringType)) {
-						sw.println("final public " + fluentOrVoid(method) + " "
+						sw.println("final public " + fluentOrVoid(method,simpleName) + " "
 								+ method.getName() + "(String arg) {");
 						sw.indent();
 						sw.println("json().put(" + quotedFieldName(method)
@@ -113,7 +117,7 @@ class BeanImplGenerator {
 					} else {
 						String paramType = method.getParameters()[0].getType()
 								.getParameterizedQualifiedSourceName();
-						sw.println("final public " + fluentOrVoid(method) + " "
+						sw.println("final public " + fluentOrVoid(method,simpleName) + " "
 								+ method.getName() + "(" + paramType + " arg)"
 								+ " {");
 						sw.indent();
@@ -156,9 +160,8 @@ class BeanImplGenerator {
 		}
 	}
 
-	private static String fluentOrVoid(JMethod method) {
-		return method.getReturnType() != JPrimitiveType.VOID ? method
-				.getEnclosingType().getSimpleSourceName() : "void";
+	private static String fluentOrVoid(JMethod method, String beanName) {
+		return method.getReturnType() != JPrimitiveType.VOID ? beanName : "void";
 	}
 
 	private static String quotedFieldName(JMethod method) {
@@ -169,14 +172,18 @@ class BeanImplGenerator {
 
 	private static boolean isSetter(JMethod method) {
 		String name = method.getName();
+		
+		//isn't that a neat and pretty coding style?
+		boolean isVoid = method.getReturnType()==JPrimitiveType.VOID;
+		boolean isFluent = method.getReturnType().isClassOrInterface() !=null &&
+				method.getEnclosingType().isAssignableFrom(method.getReturnType().isClassOrInterface());
+		boolean singleParam = method.getParameters().length == 1;
+		
 		// traditional setFooField(type) JavaBean setter
 		if (name.startsWith("set") && Character.isUpperCase(name.charAt(3))) {
-			return method.getParameters().length == 1
-					&& (method.getReturnType() == JPrimitiveType.VOID || method
-							.getReturnType() == method.getEnclosingType());
+			return singleParam && (isVoid || isFluent);
 			// non-traditional fluent-only EnclosingType fooField(type) setter
-		} else if (method.getReturnType() == method.getEnclosingType()
-				&& method.getParameters().length == 1) {
+		} else if (singleParam && isFluent) {
 			return true;
 		}
 		return false;
